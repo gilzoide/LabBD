@@ -1,0 +1,29 @@
+hell.outdir = 'build'
+
+-- Caminhos do instantclient (seja qual versão for)
+local ICdir = utils.glob ('instantclient_*')[1]
+local SDKdir = utils.makePath (ICdir, 'sdk', 'include')
+
+-- Coisas do WX
+wxIncludes = utils.shell ('wx-config --cflags')
+wxLinks = utils.shell ('wx-config --libs')
+
+-- nome do nosso executável
+local exe = 'main'
+
+build {
+	input = utils.glob ('*.cpp'),
+	output = exe,
+	cmd = '&' .. wxLinks,
+	links = {'occi', 'nnz11', 'clntsh'},
+	std = 'c++11',
+	flags = '&' .. wxIncludes,
+	includes = SDKdir,
+	libDirs = ICdir
+}
+
+
+target ('run', command {
+	cmd = 'LD_LIBRARY_PATH=' .. ICdir .. ' ' .. utils.makePath (hell.outdir, exe),
+	runTarget = true
+})

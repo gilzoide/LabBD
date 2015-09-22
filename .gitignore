@@ -5,6 +5,7 @@
 # objetos
 *.o
 build
+instantclient*
 
 # Cscope
 *cscope*

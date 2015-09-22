@@ -1,7 +1,7 @@
 Trabalhos Práticos de Laboratório de Bases de Dados
 ===================================================
 
-Repositório de todos as partes dos trabalhos
+Repositório de todas as partes dos trabalhos
 
 Em sua ordem:
 
