@@ -6,11 +6,11 @@ instantclientSDK = $(instantclient)/sdk/include
 exe = main
 BUILDDIR = build
 
-objs = dbManager.o interface.o
+objs = dbManager.o interface.o selectIterator.o
 CXX = g++
 INCLUDEDIRS = -I$(instantclientSDK) $(shell wx-config --cflags)
 LINKS = -L$(instantclient) -locci -lnnz11 -lclntsh $(shell wx-config --libs)
-CXXFLAGS = -Wall -g -std=c++11 $(INCLUDEDIRS)
+CXXFLAGS = -Wall -Wno-deprecated-declarations -g -std=c++11 $(INCLUDEDIRS)
 
 all : $(objs)
 	$(CXX) -o $(BUILDDIR)/$(exe) $(foreach f, $^, $(BUILDDIR)/$f) $(CXXFLAGS) $(LINKS)

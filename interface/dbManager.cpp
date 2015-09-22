@@ -25,10 +25,10 @@ dbManager::~dbManager () {
 
 
 // Method which prints the data type
+// Taken from OCCI docs
 const char *printType (int type)
 {
-	switch (type)
-	{
+	switch (type) {
 		case OCCI_SQLT_CHR : 	return "VARCHAR2";			break;
 		case OCCI_SQLT_NUM : 	return "NUMBER";			break;
 		case OCCIINT : 			return "INTEGER";			break;
@@ -72,11 +72,12 @@ void dbManager::select () {
 				resultado->getString (3) << '\t' << resultado->getString (2) <<
 				'\t' << resultado->getInt (4) << " eleitores" << endl;
 	}
+	conn->terminateStatement (stmt);
 }
 
 
-int dbManager::printTableMetaData (const char *name) {
-	auto meta = conn->getMetaData (name);
+int dbManager::printTableMetaData (const char *table_name) {
+	auto meta = conn->getMetaData (table_name);
 	// se não é Table, nem preocupa
 	if (meta.getInt (MetaData::ATTR_PTYPE) != MetaData::PTYPE_TABLE) {
 		return 0;
@@ -85,7 +86,7 @@ int dbManager::printTableMetaData (const char *name) {
 	cout << "Table name: " << meta.getString (MetaData::ATTR_OBJ_NAME) << endl;
 
 	auto columns = meta.getVector (MetaData::ATTR_LIST_COLUMNS);
-	for (auto & c : columns) {
+	for (auto c : columns) {
 		cout << "  Column name: " << c.getString (MetaData::ATTR_NAME) << endl;
 		cout << "    Data Type: " << printType (c.getInt(MetaData::ATTR_DATA_TYPE)) << endl;
 		cout << "    Size : " << c.getInt (MetaData::ATTR_DATA_SIZE) << endl;
@@ -101,4 +102,19 @@ int dbManager::printTableMetaData (const char *name) {
 	}
 
 	return 1;
+}
+
+
+vector<string> dbManager::getTableColumns (const char *table_name, int idx) {
+	auto meta = conn->getMetaData (table_name);
+	
+
+	auto stmt = conn->createStatement();
+	auto resultado = stmt->executeQuery ("SELECT * FROM " + string (table_name));
+
+	vector<string> vec;
+	while (resultado->next ()) {
+		vec.push_back (resultado->getString (idx));
+	}
+	return move (vec);
 }

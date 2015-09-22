@@ -23,7 +23,7 @@ using namespace oracle::occi;
 class dbManager {
 public:
 	/**
-	 * 
+	 * Ctor, inicia conexão
 	 */
 	dbManager ();
 	/**
@@ -31,10 +31,23 @@ public:
 	 */
 	~dbManager ();
 
+	/**
+	 * Select de teste
+	 */
 	void select ();
-	int printTableMetaData (const char *name);
+	/**
+	 * Imprime tabela `name' e seus campos
+	 */
+	int printTableMetaData (const char *table_name);
+
+	/**
+	 * Pega as colunas 
+	 */
+	vector<string> getTableColumns (const char *table_name, int idx);
 private:
+	/// Nosso ambiente OCCI
 	Environment *env;
+	/// Conexão com o BD
 	Connection *conn;
 };
 

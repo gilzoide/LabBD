@@ -17,7 +17,7 @@ build {
 	cmd = '&' .. wxLinks,
 	links = {'occi', 'nnz11', 'clntsh'},
 	std = 'c++11',
-	flags = '&' .. wxIncludes,
+	flags = '&-g -Wno-deprecated-declarations ' .. wxIncludes,
 	includes = SDKdir,
 	libDirs = ICdir
 }
