@@ -12,18 +12,18 @@ wxLinks = utils.shell ('wx-config --libs')
 local exe = 'main'
 
 build {
-	input = utils.glob ('*.cpp'),
+	input = utils.glob ('{wx,db}/*.cpp'),
 	output = exe,
 	cmd = '&' .. wxLinks,
 	links = {'occi', 'nnz11', 'clntsh'},
 	std = 'c++11',
 	flags = '&-g -Wno-deprecated-declarations ' .. wxIncludes,
-	includes = SDKdir,
+	includes = {SDKdir, 'include'},
 	libDirs = ICdir
 }
 
 
-target ('run', command {
-	cmd = 'LD_LIBRARY_PATH=' .. ICdir .. ' ' .. utils.makePath (hell.outdir, exe),
-	runTarget = true
+exclusiveTarget ('run', command {
+	cmd = 'LD_LIBRARY_PATH=' .. ICdir .. ' ' .. (gdb and 'gdb ' or '') ..
+			utils.makePath (hell.outdir, exe)
 })

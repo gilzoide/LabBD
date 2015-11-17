@@ -7,14 +7,7 @@ using namespace std;
 using namespace oracle::occi;
 
 // String de conexão com o BD
-#define dbConnect \
-"(DESCRIPTION =						\
-	(ADDRESS =						\
-		(PROTOCOL = tcp) 			\
-		(HOST = grad.icmc.usp.br)	\
-		(PORT = 15215))				\
-	(CONNECT_DATA = (SID = orcl))	\
-)"
+#define dbConnect "//grad.icmc.usp.br:15215/orcl.grad.usricmc.icmc.usp.br"
 
 // Usuário e Senha pra conexão
 #define usuarioConnect "a8532248"
@@ -25,7 +18,7 @@ public:
 	/**
 	 * Ctor, inicia conexão
 	 */
-	dbManager ();
+	dbManager () throw (string);
 	/**
 	 * Dtor, fecha conexão
 	 */
@@ -34,7 +27,7 @@ public:
 	/**
 	 * Select de teste
 	 */
-	void select ();
+	vector<vector<string>> select (const string & sel, const string & from);
 	/**
 	 * Imprime tabela `name' e seus campos
 	 */
@@ -44,6 +37,7 @@ public:
 	 * Pega as colunas 
 	 */
 	vector<string> getTableColumns (const char *table_name, int idx);
+
 private:
 	/// Nosso ambiente OCCI
 	Environment *env;

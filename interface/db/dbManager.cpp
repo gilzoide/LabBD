@@ -1,8 +1,9 @@
 #include "dbManager.hpp"
+#include "query.hpp"
 
 
-dbManager::dbManager () {
-	cout << "Usando Oracle versão " << OCCI_MAJOR_VERSION << '.' << OCCI_MINOR_VERSION << endl << endl;
+dbManager::dbManager () throw (string) {
+	cout << "Usando OCCI versão " << OCCI_MAJOR_VERSION << '.' << OCCI_MINOR_VERSION << endl;
 
 	// ambiente Oracle
 	env = Environment::createEnvironment ();
@@ -10,10 +11,10 @@ dbManager::dbManager () {
 	try {
 		// Conecta, por favor
 		conn = env->createConnection (usuarioConnect, senhaConnect, dbConnect);
+		cout << "Conectado!" << endl;
 	}
 	catch (SQLException e) {
-		cout << "FALHOU AO CONECTAR: " << e.what ();
-		conn = nullptr;
+		throw e.getMessage ();
 	}
 }
 
@@ -21,6 +22,7 @@ dbManager::dbManager () {
 dbManager::~dbManager () {
 	// termina conexão, porque dizem que precisa (pq n usar destrutor, mô deus!)
 	env->terminateConnection (conn);
+	Environment::terminateEnvironment (env);
 }
 
 
@@ -59,20 +61,9 @@ const char *printType (int type)
 }
 
 
-void dbManager::select () {
-	// dá um select ae
-	auto stmt = conn->createStatement();
-	auto resultado = stmt->executeQuery ("SELECT * FROM Zona");
-
-	// e escreve os resultados
-	cout << "Listando Zonas existentes" << endl;
-	cout << "-------------------------" << endl;
-	while (resultado->next ()) {
-		cout << resultado->getInt (1) << " -> " << "localizado em: " <<
-				resultado->getString (3) << '\t' << resultado->getString (2) <<
-				'\t' << resultado->getInt (4) << " eleitores" << endl;
-	}
-	conn->terminateStatement (stmt);
+vector<vector<string>> dbManager::select (const string & sel, const string & from) {
+	query q (conn);
+	return q (sel, from);
 }
 
 

@@ -4,19 +4,17 @@ instantclientSDK = $(instantclient)/sdk/include
 
 # nome do executável, e diretório de construção
 exe = main
-BUILDDIR = build
+export BUILDDIR = $(CURDIR)/build
 
-objs = dbManager.o interface.o selectIterator.o
-CXX = g++
-INCLUDEDIRS = -I$(instantclientSDK) $(shell wx-config --cflags)
-LINKS = -L$(instantclient) -locci -lnnz11 -lclntsh $(shell wx-config --libs)
-CXXFLAGS = -Wall -Wno-deprecated-declarations -g -std=c++11 $(INCLUDEDIRS)
+export CXX = g++
+export INCLUDEDIRS = -I$(CURDIR)/$(instantclientSDK) $(shell wx-config --cflags) -I$(CURDIR)/include
+export LINKS = -L$(instantclient) -locci -lnnz11 -lclntsh $(shell wx-config --libs)
+export CXXFLAGS = -Wall -Wno-deprecated-declarations -g -std=c++11 $(INCLUDEDIRS)
 
-all : $(objs)
-	$(CXX) -o $(BUILDDIR)/$(exe) $(foreach f, $^, $(BUILDDIR)/$f) $(CXXFLAGS) $(LINKS)
-
-%.o : %.cpp
-	$(CXX) -o $(BUILDDIR)/$@ -c $< $(CXXFLAGS)
+all :
+	$(MAKE) -C wx
+	$(MAKE) -C db
+	$(CXX) -o $(BUILDDIR)/$(exe) $(BUILDDIR)/*.o $(CXXFLAGS) $(LINKS)
 
 # linka com o instantclient pra rodar
 run :
