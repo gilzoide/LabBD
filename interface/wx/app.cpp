@@ -34,17 +34,21 @@ LabBD::LabBD (const wxString& title) :
 	SetMenuBar (menuBar);
 	// Menu do programa
 	auto fileMenu = new wxMenu;
-	menuBar->Append (fileMenu, "Programa");
+	menuBar->Append (fileMenu, "&Programa");
 
 	fileMenu->Append (wxID_EXIT, "Sair", "Sai do programa");
 	Connect (wxID_EXIT, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler (LabBD::OnExit));
+	// Menu de Operações
+	auto opMenu = new wxMenu;
+	menuBar->Append (opMenu, wxT ("&Operações"));
 	// Menu de ajuda
 	auto helpMenu = new wxMenu;
-	menuBar->Append (helpMenu, "Ajuda");
+	menuBar->Append (helpMenu, "&Ajuda");
 
-	helpMenu->Append (wxID_ABOUT, "Sobre");
+	helpMenu->Append (wxID_ABOUT, "&Sobre");
 	Connect (wxID_ABOUT, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler (LabBD::OnAbout));
 
+	// Resto
 	auto vec = db.select ("*", "Pessoa WHERE escolaridade LIKE 'ensino medio'");
 	q = new queryLister (panel, -1, wxPoint (10, 50), wxSize (700, 400), vec);
 
