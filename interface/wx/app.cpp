@@ -9,20 +9,31 @@ class MyApp : public wxApp
 		virtual bool OnInit();
 };
 
+enum ids {
+	ID_WX
+};
+
 class LabBD : public wxFrame {
 public:
 	LabBD (const wxString& title);
 
 	void OnExit (wxCommandEvent & event);
 	void OnAbout (wxCommandEvent & event);
-
-	//wxMenuBar *menuBar;
+	void OnWX (wxCommandEvent & event);
 
 	wxChoice *ch;
 	queryLister *q;
 
 	dbManager db;
+	wxDECLARE_EVENT_TABLE ();
 };
+
+wxBEGIN_EVENT_TABLE (LabBD, wxFrame)
+	EVT_MENU (wxID_EXIT, LabBD::OnExit)
+	EVT_MENU (wxID_ABOUT, LabBD::OnAbout)
+	EVT_MENU(ID_WX, LabBD::OnWX)
+wxEND_EVENT_TABLE()
+
 
 
 LabBD::LabBD (const wxString& title) :
@@ -37,7 +48,6 @@ LabBD::LabBD (const wxString& title) :
 	menuBar->Append (fileMenu, "&Programa");
 
 	fileMenu->Append (wxID_EXIT, "Sair", "Sai do programa");
-	Connect (wxID_EXIT, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler (LabBD::OnExit));
 	// Menu de Operações
 	auto opMenu = new wxMenu;
 	menuBar->Append (opMenu, wxT ("&Operações"));
@@ -46,8 +56,7 @@ LabBD::LabBD (const wxString& title) :
 	menuBar->Append (helpMenu, "&Ajuda");
 
 	helpMenu->Append (wxID_ABOUT, "&Sobre");
-	Connect (wxID_ABOUT, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler (LabBD::OnAbout));
-
+	helpMenu->Append (ID_WX, "&Sobre o wxWidgets", "Mostra informação sobre a versão do WxWidgets usada");
 	// Resto
 	auto vec = db.select ("*", "Pessoa WHERE escolaridade LIKE 'ensino medio'");
 	q = new queryLister (panel, -1, wxPoint (10, 50), wxSize (700, 400), vec);
@@ -79,6 +88,9 @@ void LabBD::OnAbout (wxCommandEvent & WXUNUSED (event)) {
 	info.AddDeveloper ("Raul Zaninetti Rosa - 8517310");
 
 	wxAboutBox (info);
+}
+void LabBD::OnWX (wxCommandEvent & event) {
+	wxInfoMessageBox (nullptr);
 }
 
 
