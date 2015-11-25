@@ -16,11 +16,15 @@ using namespace oracle::occi;
 class dbManager {
 public:
 	/**
-	 * Ctor, inicia conexão
+	 * Inicia conexão com o banco de dados
 	 */
-	dbManager () throw (string);
+	void connect () throw (string);
 	/**
-	 * Dtor, fecha conexão
+	 * Finaliza conexão com o banco de dados
+	 */
+	void disconnect ();
+	/**
+	 * Dtor, fecha conexão (se existir)
 	 */
 	~dbManager ();
 
@@ -40,8 +44,8 @@ public:
 
 private:
 	/// Nosso ambiente OCCI
-	Environment *env;
+	Environment *env {nullptr};
 	/// Conexão com o BD
-	Connection *conn;
+	Connection *conn {nullptr};
 };
 

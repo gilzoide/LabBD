@@ -2,13 +2,12 @@
 #include "query.hpp"
 
 
-dbManager::dbManager () throw (string) {
+void dbManager::connect () throw (string) {
 	cout << "Usando OCCI versão " << OCCI_MAJOR_VERSION << '.' << OCCI_MINOR_VERSION << endl;
 
-	// ambiente Oracle
-	env = Environment::createEnvironment ();
-
 	try {
+		// ambiente Oracle
+		env = Environment::createEnvironment ();
 		// Conecta, por favor
 		conn = env->createConnection (usuarioConnect, senhaConnect, dbConnect);
 		cout << "Conectado!" << endl;
@@ -19,10 +18,18 @@ dbManager::dbManager () throw (string) {
 }
 
 
+void dbManager::disconnect () {
+	if (env) {
+		env->terminateConnection (conn);
+		Environment::terminateEnvironment (env);
+		env = nullptr;
+	}
+}
+
+
 dbManager::~dbManager () {
 	// termina conexão, porque dizem que precisa (pq n usar destrutor, mô deus!)
-	env->terminateConnection (conn);
-	Environment::terminateEnvironment (env);
+	disconnect ();
 }
 
 
