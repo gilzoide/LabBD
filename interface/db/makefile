@@ -1,4 +1,4 @@
-objs = dbManager.o query.o
+objs = dbManager.o query.o tableMetadata.o
 
 all : $(objs)
 
