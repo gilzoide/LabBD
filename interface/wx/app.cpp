@@ -7,8 +7,8 @@
  * Classe da aplicação
  */
 class MyApp : public wxApp {
-	public:
-		virtual bool OnInit();
+public:
+	virtual bool OnInit();
 };
 
 /**
@@ -20,6 +20,9 @@ public:
 
 	/// Tenta conectar/reconectar o BD
 	void reconnect ();
+
+	/// Monta os menus na barra de menus
+	void montaMenus ();
 
 	// Eventos gerados
 	void OnExit (wxCommandEvent & event);
@@ -43,8 +46,8 @@ wxBEGIN_EVENT_TABLE (LabBD, wxFrame)
 	EVT_MENU (wxID_EXIT, LabBD::OnExit)
 	EVT_MENU (wxID_ABOUT, LabBD::OnAbout)
 	EVT_MENU (ID_RECONNECT, LabBD::OnReconnect)
-	EVT_MENU(ID_WX, LabBD::OnWX)
-wxEND_EVENT_TABLE()
+	EVT_MENU (ID_WX, LabBD::OnWX)
+wxEND_EVENT_TABLE ()
 
 
 
@@ -52,8 +55,18 @@ LabBD::LabBD (const wxString& title) :
 		wxFrame (NULL, wxID_ANY, title, wxDefaultPosition, wxSize (800, 600)) {
 	auto panel = new wxPanel (this, wxID_ANY);
 	CreateStatusBar ();
+	montaMenus ();
 	reconnect ();
 
+	db.printTableMetaData ("Zona");
+
+	SetIcon (wxIcon ("cavalo.png"));
+
+	Centre();
+}
+
+
+void LabBD::montaMenus () {
 	// Barra de menu
 	auto menuBar = new wxMenuBar;
 	SetMenuBar (menuBar);
@@ -73,23 +86,6 @@ LabBD::LabBD (const wxString& title) :
 
 	helpMenu->Append (wxID_ABOUT, "&Sobre", "Mostra informação sobre o programa");
 	helpMenu->Append (ID_WX, "&Sobre o wxWidgets", "Mostra informação sobre a versão do WxWidgets usada");
-	// Resto
-	auto vec = db.select ("*", "Pessoa WHERE escolaridade LIKE 'ensino medio'");
-	auto q = new queryLister (panel, wxID_ANY, wxPoint (10, 50), wxSize (750, 450), vec);
-
-	auto choices = db.getTableColumns ("Zona", 3);
-	vector<wxString> strs;
-	for (auto c : choices) {
-		strs.push_back (wxString (c));
-	}
-
-	auto ch = new wxChoice (panel, 5, wxPoint (10, 500), wxDefaultSize, strs.size (),
-			strs.data ());
-	ch->SetSelection (0);
-
-	SetIcon (wxIcon ("cavalo.png"));
-
-	Centre();
 }
 
 void LabBD::reconnect () {
@@ -98,8 +94,8 @@ void LabBD::reconnect () {
 		db.connect ();
 		SetStatusText ("Conectado!");
 	}
-	catch (string err) {
-		wxMessageBox (err, "Erro de conexão", wxCENTRE | wxICON_ERROR | wxOK);
+	catch (SQLException &e) {
+		wxMessageBox (e.getMessage (), "Erro de conexão", wxCENTRE | wxICON_ERROR | wxOK);
 		SetStatusText ("Erro de conexão!");
 	}
 }
@@ -127,7 +123,7 @@ void LabBD::OnWX (wxCommandEvent & WXUNUSED (event)) {
 
 IMPLEMENT_APP(MyApp)
 
-bool MyApp::OnInit() {
+bool MyApp::OnInit () {
 	LabBD *labBD = new LabBD ("LabBD");
 	labBD->Show (true);
 
@@ -135,6 +131,3 @@ bool MyApp::OnInit() {
 
 	return true;
 }
-
-
-

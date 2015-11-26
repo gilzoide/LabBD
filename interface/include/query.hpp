@@ -6,6 +6,9 @@
 using namespace std;
 using namespace oracle::occi;
 
+/**
+ * Classe que executa SELECTs
+ */
 class query {
 public:
 	/**

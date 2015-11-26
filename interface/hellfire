@@ -19,7 +19,10 @@ build {
 	std = 'c++11',
 	flags = '&-g -Wno-deprecated-declarations ' .. wxIncludes,
 	includes = {SDKdir, 'include'},
-	libDirs = ICdir
+	libDirs = ICdir,
+	prepare_echo = function (_, i)
+		return 'CC ' .. i
+	end
 }
 
 

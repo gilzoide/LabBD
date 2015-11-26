@@ -35,8 +35,7 @@ vector<vector<string>> query::operator() (const string & select, const string & 
 		conn->terminateStatement (stmt);
 	}
 	catch (SQLException e) {
-		cout << "Erro na query: " << e.what ();
-		ret.push_back ({""});
+		throw e.getMessage ();
 	}
 
 	return move (ret);

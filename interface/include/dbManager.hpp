@@ -1,7 +1,7 @@
 #pragma once
 
-#include <iostream>
 #include "occi.h"
+#include <iostream>
 
 using namespace std;
 using namespace oracle::occi;
@@ -18,7 +18,7 @@ public:
 	/**
 	 * Inicia conexão com o banco de dados
 	 */
-	void connect () throw (string);
+	void connect () throw (SQLException);
 	/**
 	 * Finaliza conexão com o banco de dados
 	 */
@@ -35,12 +35,12 @@ public:
 	/**
 	 * Imprime tabela `name' e seus campos
 	 */
-	int printTableMetaData (const char *table_name);
+	int printTableMetaData (const char *tableName);
 
 	/**
 	 * Pega as colunas 
 	 */
-	vector<string> getTableColumns (const char *table_name, int idx);
+	vector<string> getTableColumns (const char *tableName, int idx);
 
 private:
 	/// Nosso ambiente OCCI
