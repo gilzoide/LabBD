@@ -23,6 +23,8 @@ struct columnMetadata {
 	string name;
 	/// Tipo de dados
 	int type;
+	/// Precisão de NUMBERs
+	int precisao;
 	/// Aceita NULL?
 	bool acceptNull;
 };

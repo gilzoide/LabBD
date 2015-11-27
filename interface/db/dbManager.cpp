@@ -44,8 +44,9 @@ int dbManager::printTableMetaData (const char *tableName) {
 	tableMetadata T (conn);
 	auto columns = T (tableName);
 	for (auto & c : columns) {
-		cout << "  Column name: " << c.name << endl;
-		cout << "    Data Type: " << printType (c.type) << endl;
+		cout << "  Name: " << c.name << endl;
+		cout << "    Tipo: " << printType (c.type) << endl;
+		cout << "    Precisão: " << c.precisao << endl;
 		if (c.acceptNull) {
 			cout << "    Allows null" << endl;
 		}

@@ -58,7 +58,7 @@ LabBD::LabBD (const wxString& title) :
 	montaMenus ();
 	reconnect ();
 
-	db.printTableMetaData ("Zona");
+	db.printTableMetaData ("Campeonato");
 
 	SetIcon (wxIcon ("cavalo.png"));
 

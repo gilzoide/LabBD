@@ -44,7 +44,7 @@ vector<columnMetadata> tableMetadata::operator() (const char *tableName) {
 	// se não é Table, nem preocupa
 	if (meta.getInt (MetaData::ATTR_PTYPE) == MetaData::PTYPE_TABLE) {
 		auto columns = meta.getVector (MetaData::ATTR_LIST_COLUMNS);
-		for (auto c : columns) {
+		for (auto & c : columns) {
 			ret.push_back (move (columnMetadata (c)));
 		}
 	}
@@ -57,5 +57,6 @@ vector<columnMetadata> tableMetadata::operator() (const char *tableName) {
 columnMetadata::columnMetadata (const MetaData& m) {
 	name = m.getString (MetaData::ATTR_NAME);
 	type = m.getInt (MetaData::ATTR_DATA_TYPE);
+	precisao = m.getInt (MetaData::ATTR_PRECISION);
 	acceptNull = m.getBoolean (MetaData::ATTR_IS_NULL);
 }
