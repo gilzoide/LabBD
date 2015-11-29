@@ -1,37 +1,42 @@
 # coding: utf-8
 
 import wx
-import cx_Oracle
+from dbManager import dbManager
+from queryLister import queryLister
 
 class myFrame (wx.Frame):
-    ip = 'grad.icmc.usp.br'
-    port = 15215
-    SID = 'orcl'
-    login = password = 'a8532248'
-    dsn_tns = cx_Oracle.makedsn (ip, port, SID)
+    """Nossa janela principal do LabBD"""
+    # IDs úteis
+    ID_RECONNECT = 100
 
     def __init__ (self):
         wx.Frame.__init__ (self, None, wx.ID_ANY, 'LabBD', wx.DefaultPosition, wx.Size (800, 600))
-        self.conn = cx_Oracle.connect (self.login, self.password, self.dsn_tns)
-        cur = self.conn.cursor ()
-        cur.execute ('SELECT * FROM Zona')
 
-        for attr in cur:
-            print attr
-        cur.close ()
+        self.db = dbManager ()
+        self.CreateStatusBar ()
 
         self.montaMenus ()
         self.Bind (wx.EVT_MENU, self.onQuit, id = wx.ID_EXIT)
         self.Bind (wx.EVT_MENU, self.onAbout, id = wx.ID_ABOUT)
+        self.Bind (wx.EVT_MENU, self.onReconnect, id = self.ID_RECONNECT)
         self.Show ()
         self.icon = wx.Icon ('cavalo.png')
         self.SetIcon (self.icon)
+
+        self.onReconnect (None)
+
+        #lister = queryLister (self, wx.ID_ANY, wx.DefaultPosition, wx.Size (700, 500))
+        #colunas, valores = self.db.select ('*', 'Zona')
+        #print colunas, valores
+        #lister.setValues (colunas, valores)
+
 
     def montaMenus (self):
         menuBar = wx.MenuBar ()
         # Menu de arquivo
         arquivo = wx.Menu ()
         menuBar.Append (arquivo, '&Arquivo')
+        arquivo.Append (self.ID_RECONNECT, '&Reconectar', 'Tenta reconectar com o bando de dados')
         arquivo.Append (wx.ID_EXIT, '&Sair', 'Sai do programa')
         # Menu de operações
         operacoes = wx.Menu ()
@@ -42,6 +47,17 @@ class myFrame (wx.Frame):
         ajuda.Append (wx.ID_ABOUT, '&Sobre', 'Mostra informação sobre o programa')
 
         self.SetMenuBar (menuBar)
+    
+    def onReconnect (self, event):
+        self.db.disconnect ()
+        try:
+            self.db.connect ()
+            self.SetStatusText ('Conectado')
+        except Exception as e:
+            wx.MessageBox (str (e), "Erro de conexão", wx.CENTRE + wx.ICON_ERROR + wx.OK)
+            self.SetStatusText ('Não conectado')
+
+
 
     def onAbout (self, event):
         info = wx.AboutDialogInfo ()

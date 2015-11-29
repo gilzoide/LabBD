@@ -6,6 +6,7 @@
 *.o
 build
 instantclient*
+*.pyc
 
 # Cscope
 *cscope*
