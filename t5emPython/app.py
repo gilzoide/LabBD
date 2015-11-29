@@ -15,6 +15,13 @@ class myFrame (wx.Frame):
     ID_SELECT = 102
     ID_ROLLBACK = 103
 
+    # Flag que marca se algo mudou na base de dados
+    algoMudou = False
+    # Painel atual
+    current = None
+    # Tamanho padrão pra painéis
+    panelSize = wx.Size (750, 500)
+
     def __init__ (self):
         wx.Frame.__init__ (self, None, wx.ID_ANY, 'LabBD', wx.DefaultPosition, wx.Size (800, 600))
         self.CreateStatusBar ()
@@ -33,17 +40,13 @@ class myFrame (wx.Frame):
         self.SetIcon (self.icon)
 
         # conecta com o banco de dados
-        self.db = dbManager ()
+        self.db = dbManager.getDbManager ()
         self.onReconnect (None)
 
-        self.selectPanel = selectPanel (self, self.ID_SELECT, db = self.db, size = wx.Size (700, 500))
-        self.selectPanel.Show (False)
+        self.insertPanel = insertPanel (self, self.ID_INSERT, size = self.panelSize)
+        self.selectPanel = selectPanel (self, self.ID_SELECT, size = self.panelSize)
 
-        self.insertPanel = insertPanel (self, self.ID_INSERT, db = self.db, size = wx.Size (700, 500))
-        self.insertPanel.Show (False)
-
-        self.current = None
-
+        self.current = self.selectPanel
 
     def montaMenus (self):
         """Cria os menus do app"""
@@ -78,18 +81,28 @@ class myFrame (wx.Frame):
 
     def onRollback (self, event):
         self.db.rollback ()
+        self.algoMudou = True
 
     def onSelect (self, event):
+        # se algo mudou, atualiza as queries
+        self.selectPanel.refresh (self.algoMudou)
+        self.algoMudou = False
+        self.changePanel (self.selectPanel)
+
+    def changePanel (self, newPanel):
         if self.current:
             self.current.Show (False)
-        self.selectPanel.Show (True)
-        self.current = self.selectPanel
+        # atualiza a janela atual
+        self.current = newPanel
+        # e mostra o trem
+        self.current.Show (True)
 
     def onInsert (self, event):
-        if self.current:
-            self.current.Show (False)
-        self.insertPanel.Show (True)
-        self.current = self.insertPanel
+        self.changePanel (self.insertPanel)
+
+    def marcaAlgoMudou (self):
+        """Marca a flag que algo mudou, para podermos dar refresh dos SELECTs"""
+        self.algoMudou = True
 
     def onAbout (self, event):
         """Mostra informações sobre esse app"""

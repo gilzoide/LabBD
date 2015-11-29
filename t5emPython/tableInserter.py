@@ -3,11 +3,12 @@
 import wx
 import cx_Oracle
 from wx.lib.intctrl import IntCtrl
+from dbManager import dbManager
 
 class tableInserter (wx.Panel):
     # Id do botão, pra rolar callback
     ID_INSERT = 100
-    def __init__ (self, parent, id, position, size, db, tabela, obs = {}):
+    def __init__ (self, parent, id, position, size, tabela, obs = {}):
         """Ctor. 'obs' é um dicionário que mostra algumas observações sobre
         alguns campos (por nome), como por exemplo CONSTRAINTs de vários tipos.
 
@@ -17,7 +18,7 @@ class tableInserter (wx.Panel):
         """
         wx.Panel.__init__ (self, parent, id, position, size)
         self.tabela = tabela
-        self.db = db
+        self.db = dbManager.getDbManager ()
         colunas = self.db.getTableInfo (tabela)
         #print colunas
 
@@ -73,6 +74,7 @@ class tableInserter (wx.Panel):
         try:
             self.db.insert (self.tabela, colunas, valores)
             wx.MessageBox ("Tupla inserida!", "Inserção", wx.CENTRE + wx.ICON_ERROR + wx.OK)
+            self.GetParent ().GetParent ().GetParent ().marcaAlgoMudou ()
         except Exception as e:
             wx.MessageBox (str (e), "Erro de inserção", wx.CENTRE + wx.ICON_ERROR + wx.OK)
 

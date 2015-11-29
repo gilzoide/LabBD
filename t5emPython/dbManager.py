@@ -13,7 +13,16 @@ class dbManager ():
     # A conexão em si
     conn = None
     # As tabelas importantes para CRUD
-    TABELAS_IMPORTANTES = set (('Zona', 'Secao', 'Urna', 'Pessoa'))
+    TABELAS_IMPORTANTES = ('Zona', 'Secao', 'Urna', 'Pessoa', 'Partido')
+
+    # A instância única, Singleton
+    instance = None
+
+    @staticmethod
+    def getDbManager ():
+        if not dbManager.instance:
+            dbManager.instance = dbManager ()
+        return dbManager.instance
 
     def connect (self):
         """Tenta conectar com o banco de dados. Solta exceção se deu ruim"""
