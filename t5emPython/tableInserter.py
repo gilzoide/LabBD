@@ -52,12 +52,14 @@ class tableInserter (wx.Panel):
                 # salva na lista, pra podermos pegar depois
                 self.campos.append ((c[0], ctrl))
 
+        # nosso botão de inserir tupla
         addButton = wx.Button (self, self.ID_INSERT, label = 'Inserir')
         sizer.Add ((-1, 20))
         sizer.Add (addButton, flag = wx.ALIGN_CENTER)
         self.Bind (wx.EVT_BUTTON, self.insere, id = self.ID_INSERT)
 
     def insere (self, event):
+        # colunas e valores a inserir
         colunas = []
         valores = []
         for c in self.campos:
@@ -74,7 +76,9 @@ class tableInserter (wx.Panel):
         try:
             self.db.insert (self.tabela, colunas, valores)
             wx.MessageBox ("Tupla inserida!", "Inserção", wx.CENTRE + wx.ICON_ERROR + wx.OK)
-            self.GetParent ().GetParent ().GetParent ().marcaAlgoMudou ()
+            app = self.GetParent ().GetParent ().GetParent ()
+            app.SetStatusText ("Tupla inserida")
+            app.algoMudou ()
         except Exception as e:
             wx.MessageBox (str (e), "Erro de inserção", wx.CENTRE + wx.ICON_ERROR + wx.OK)
 

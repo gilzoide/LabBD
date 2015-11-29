@@ -83,12 +83,10 @@ class myFrame (wx.Frame):
         """Pergunta se usuário quer dar Rollback"""
         if wx.MessageBox ("Desfazer alterações no BD?", "Rollback?", wx.YES_NO) == wx.YES:
             self.db.rollback ()
-            self.algoMudou = True
+            self.SetStatusText ("Rollback executado")
+            self.algoMudou ()
 
     def onSelect (self, event):
-        # se algo mudou, atualiza as queries
-        self.selectPanel.refresh (self.algoMudou)
-        self.algoMudou = False
         self.changePanel (self.selectPanel)
 
     def changePanel (self, newPanel):
@@ -102,9 +100,9 @@ class myFrame (wx.Frame):
     def onInsert (self, event):
         self.changePanel (self.insertPanel)
 
-    def marcaAlgoMudou (self):
-        """Marca a flag que algo mudou, para podermos dar refresh dos SELECTs"""
-        self.algoMudou = True
+    def algoMudou (self):
+        """Algo mudou, então refaz os SELECTs"""
+        self.selectPanel.refresh ()
 
     def onAbout (self, event):
         """Mostra informações sobre esse app"""

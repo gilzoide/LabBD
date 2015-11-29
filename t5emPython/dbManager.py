@@ -20,6 +20,7 @@ class dbManager ():
 
     @staticmethod
     def getDbManager ():
+        # Singleton! Só cria se for a primeira
         if not dbManager.instance:
             dbManager.instance = dbManager ()
         return dbManager.instance
@@ -51,15 +52,17 @@ class dbManager ():
         """Executa um "DELETE FROM tabela WHERE where"""
         try:
             cur = self.conn.cursor ()
+            # conjunto de condições 'ATTR_NAME = valor'
             condicoes = []
             for i, c in enumerate (colunas):
+                # se número, só vira string
                 if c[1] is cx_Oracle.NUMBER:
                     valor = str (valores[i])
+                # strings: põe aspas
                 else:
                     valor = "'" + valores[i] + "'"
                 condicoes.append (c[0] + ' = ' + valor)
             string = 'DELETE FROM ' + tabela + ' WHERE ' + (' AND '.join (condicoes))
-            print string
             cur.execute (string)
         except cx_Oracle.DatabaseError, exc:
             raise Exception (exc.args[0].message)

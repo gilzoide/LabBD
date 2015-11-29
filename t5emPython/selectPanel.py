@@ -13,6 +13,7 @@ class selectPanel (wx.Panel):
 
         self.db = dbManager.getDbManager ()
 
+        # BoxSizer, pra por os 2 negócio junto
         sizer = wx.BoxSizer (wx.VERTICAL)
         self.SetSizer (sizer)
 
@@ -26,13 +27,16 @@ class selectPanel (wx.Panel):
             self.paginas.append (pagina)
             self.note.AddPage (pagina, tabela)
 
+        # botão de apagar
         deleteButton = wx.Button (self, self.ID_DELETE, label = "Apagar tupla")
         self.Bind (wx.EVT_BUTTON, self.onDelete, id = self.ID_DELETE)
         sizer.Add (deleteButton, flag = wx.ALIGN_CENTER, proportion = 1)
 
-        self.refresh (True)
+        # e desenha as tabela
+        self.refresh ()
 
     def onDelete (self, event):
+        # page é o queryLister atual
         page = self.note.GetCurrentPage ()
         prox = -1
         while True:
@@ -42,14 +46,16 @@ class selectPanel (wx.Panel):
             try:
                 self.db.delete (self.note.GetPageText (self.note.GetSelection ()),
                     page.colunas, page.valores[prox])
-                wx.MessageBox ("Tupla apagada", "", wx.CENTRE + wx.ICON_ERROR + wx.OK)
-                page.refresh ()
+                wx.MessageBox ("Tupla apagada")
+                self.GetParent ().SetStatusText ("Tupla(s) apagada")
             except Exception as e:
-                wx.MessageBox (str (e), "Erro ao apagar", wx.CENTRE + wx.ICON_ERROR + wx.OK)
+                wx.MessageBox (str (e), "Erro ao apagar tupla(s)", wx.CENTRE + wx.ICON_ERROR + wx.OK)
+                self.GetParent ().SetStatusText ("Erro ao apagar tupla(s)")
+        # Refaz a página
+        page.refresh ()
 
-    def refresh (self, doRefresh):
+    def refresh (self):
         """Atualiza as informações das tabelas, se necessário"""
-        if doRefresh:
-            for pag in self.paginas:
-                pag.refresh ()
+        for pag in self.paginas:
+            pag.refresh ()
 
