@@ -51,7 +51,13 @@ class dbManager ():
         cur.execute ('SELECT * FROM ' + tabela)
         return cur.description
 
+    def rollback (self):
+        """Dá rollback na transação"""
+        self.conn.rollback ()
+
     def disconnect (self):
         """Disconecta do banco de dados (se tiver conectado, claro)"""
         if self.conn:
+            # commita as mudanças
+            self.conn.commit ()
             self.conn.close ()

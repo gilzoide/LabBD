@@ -13,6 +13,7 @@ class myFrame (wx.Frame):
     ID_RECONNECT = 100
     ID_INSERT = 101
     ID_SELECT = 102
+    ID_ROLLBACK = 103
 
     def __init__ (self):
         wx.Frame.__init__ (self, None, wx.ID_ANY, 'LabBD', wx.DefaultPosition, wx.Size (800, 600))
@@ -24,6 +25,7 @@ class myFrame (wx.Frame):
         self.Bind (wx.EVT_MENU, self.onReconnect, id = self.ID_RECONNECT)
         self.Bind (wx.EVT_MENU, self.onSelect, id = self.ID_SELECT)
         self.Bind (wx.EVT_MENU, self.onInsert, id = self.ID_INSERT)
+        self.Bind (wx.EVT_MENU, self.onRollback, id = self.ID_ROLLBACK)
 
         # abre a tela e troca o ícone
         self.Show ()
@@ -50,6 +52,7 @@ class myFrame (wx.Frame):
         arquivo = wx.Menu ()
         menuBar.Append (arquivo, '&Arquivo')
         arquivo.Append (self.ID_RECONNECT, '&Reconectar', 'Tenta reconectar com o bando de dados')
+        arquivo.Append (self.ID_ROLLBACK, '&Descartar modificações', 'Descarta transação corrente')
         arquivo.Append (wx.ID_EXIT, '&Sair', 'Sai do programa')
         # Menu de operações
         operacoes = wx.Menu ()
@@ -72,6 +75,9 @@ class myFrame (wx.Frame):
         except Exception as e:
             wx.MessageBox (str (e), "Erro de conexão", wx.CENTRE + wx.ICON_ERROR + wx.OK)
             self.SetStatusText ('Não conectado')
+
+    def onRollback (self, event):
+        self.db.rollback ()
 
     def onSelect (self, event):
         if self.current:
@@ -98,6 +104,7 @@ class myFrame (wx.Frame):
 
     def onQuit (self, event):
         """Sai do programa"""
+        self.db.disconnect ()
         self.Close ()
 
 app = wx.App (False)
