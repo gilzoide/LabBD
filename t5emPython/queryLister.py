@@ -22,6 +22,7 @@ class queryLister (wx.ListCtrl):
         # limpa primeiro
         self.ClearAll ()
         # salva os valores pra tabela
+        self.colunas = colunas
         self.valores = valores
         height = len (valores)
         width = len (colunas)

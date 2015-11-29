@@ -11,6 +11,8 @@ class selectPanel (wx.Panel):
     def __init__ (self, parent, id = wx.ID_ANY, position = wx.DefaultPosition, size = wx.DefaultSize):
         wx.Panel.__init__ (self, parent, id, position, size)
 
+        self.db = dbManager.getDbManager ()
+
         sizer = wx.BoxSizer (wx.VERTICAL)
         self.SetSizer (sizer)
 
@@ -25,11 +27,28 @@ class selectPanel (wx.Panel):
             self.note.AddPage (pagina, tabela)
 
         deleteButton = wx.Button (self, self.ID_DELETE, label = "Apagar tupla")
+        self.Bind (wx.EVT_BUTTON, self.onDelete, id = self.ID_DELETE)
         sizer.Add (deleteButton, flag = wx.ALIGN_CENTER, proportion = 1)
 
         self.refresh (True)
 
+    def onDelete (self, event):
+        page = self.note.GetCurrentPage ()
+        prox = -1
+        while True:
+            prox = page.GetNextSelected (prox)
+            if prox == -1:
+                break
+            try:
+                self.db.delete (self.note.GetPageText (self.note.GetSelection ()),
+                    page.colunas, page.valores[prox])
+                wx.MessageBox ("Tupla apagada", "", wx.CENTRE + wx.ICON_ERROR + wx.OK)
+                page.refresh ()
+            except Exception as e:
+                wx.MessageBox (str (e), "Erro ao apagar", wx.CENTRE + wx.ICON_ERROR + wx.OK)
+
     def refresh (self, doRefresh):
+        """Atualiza as informações das tabelas, se necessário"""
         if doRefresh:
             for pag in self.paginas:
                 pag.refresh ()

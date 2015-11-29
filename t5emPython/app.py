@@ -26,6 +26,7 @@ class myFrame (wx.Frame):
         wx.Frame.__init__ (self, None, wx.ID_ANY, 'LabBD', wx.DefaultPosition, wx.Size (800, 600))
         self.CreateStatusBar ()
 
+        # Menus
         self.montaMenus ()
         self.Bind (wx.EVT_MENU, self.onQuit, id = wx.ID_EXIT)
         self.Bind (wx.EVT_MENU, self.onAbout, id = wx.ID_ABOUT)
@@ -33,6 +34,12 @@ class myFrame (wx.Frame):
         self.Bind (wx.EVT_MENU, self.onSelect, id = self.ID_SELECT)
         self.Bind (wx.EVT_MENU, self.onInsert, id = self.ID_INSERT)
         self.Bind (wx.EVT_MENU, self.onRollback, id = self.ID_ROLLBACK)
+
+        # Atalhos do teclado
+        atalhos = wx.AcceleratorTable ([
+                    (wx.ACCEL_CTRL, ord ('Z'), self.ID_ROLLBACK)
+                ])
+        self.SetAcceleratorTable (atalhos)
 
         # abre a tela e troca o ícone
         self.Show ()
@@ -55,7 +62,7 @@ class myFrame (wx.Frame):
         arquivo = wx.Menu ()
         menuBar.Append (arquivo, '&Arquivo')
         arquivo.Append (self.ID_RECONNECT, '&Reconectar', 'Tenta reconectar com o bando de dados')
-        arquivo.Append (self.ID_ROLLBACK, '&Descartar modificações', 'Descarta transação corrente')
+        arquivo.Append (self.ID_ROLLBACK, '&Descartar modificações\tCtrl-Z', 'Descarta transação corrente')
         arquivo.Append (wx.ID_EXIT, '&Sair', 'Sai do programa')
         # Menu de operações
         operacoes = wx.Menu ()
@@ -80,8 +87,10 @@ class myFrame (wx.Frame):
             self.SetStatusText ('Não conectado')
 
     def onRollback (self, event):
-        self.db.rollback ()
-        self.algoMudou = True
+        """Pergunta se usuário quer dar Rollback"""
+        if wx.MessageBox ("Desfazer alterações no BD?", "Rollback?", wx.YES_NO) == wx.YES:
+            self.db.rollback ()
+            self.algoMudou = True
 
     def onSelect (self, event):
         # se algo mudou, atualiza as queries

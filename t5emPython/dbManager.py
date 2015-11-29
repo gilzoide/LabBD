@@ -52,6 +52,23 @@ class dbManager ():
             cur.execute (string)
         except cx_Oracle.DatabaseError, exc:
             raise Exception (exc.args[0].message)
+
+    def delete (self, tabela, colunas, valores):
+        """Executa um "DELETE FROM tabela WHERE where"""
+        try:
+            cur = self.conn.cursor ()
+            condicoes = []
+            for i, c in enumerate (colunas):
+                if c[1] is cx_Oracle.NUMBER:
+                    valor = str (valores[i])
+                else:
+                    valor = "'" + valores[i] + "'"
+                condicoes.append (c[0] + ' = ' + valor)
+            string = 'DELETE FROM ' + tabela + ' WHERE ' + (' AND '.join (condicoes))
+            print string
+            cur.execute (string)
+        except cx_Oracle.DatabaseError, exc:
+            raise Exception (exc.args[0].message)
         
 
     def getTableInfo (self, tabela):
