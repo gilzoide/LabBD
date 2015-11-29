@@ -11,27 +11,30 @@ class myFrame (wx.Frame):
 
     def __init__ (self):
         wx.Frame.__init__ (self, None, wx.ID_ANY, 'LabBD', wx.DefaultPosition, wx.Size (800, 600))
-
-        self.db = dbManager ()
         self.CreateStatusBar ()
 
         self.montaMenus ()
         self.Bind (wx.EVT_MENU, self.onQuit, id = wx.ID_EXIT)
         self.Bind (wx.EVT_MENU, self.onAbout, id = wx.ID_ABOUT)
         self.Bind (wx.EVT_MENU, self.onReconnect, id = self.ID_RECONNECT)
+
+        # abre a tela e troca o ícone
         self.Show ()
         self.icon = wx.Icon ('cavalo.png')
         self.SetIcon (self.icon)
 
+        # conecta com o banco de dados
+        self.db = dbManager ()
         self.onReconnect (None)
 
-        #lister = queryLister (self, wx.ID_ANY, wx.DefaultPosition, wx.Size (700, 500))
-        #colunas, valores = self.db.select ('*', 'Zona')
-        #print colunas, valores
-        #lister.setValues (colunas, valores)
+        # teste do queryLister
+        lister = queryLister (self, wx.ID_ANY, wx.DefaultPosition, wx.Size (700, 500))
+        colunas, valores = self.db.select ('*', 'Pessoa WHERE nroZona = 1')
+        lister.setValues (colunas, valores)
 
 
     def montaMenus (self):
+        """Cria os menus do app"""
         menuBar = wx.MenuBar ()
         # Menu de arquivo
         arquivo = wx.Menu ()
@@ -49,6 +52,7 @@ class myFrame (wx.Frame):
         self.SetMenuBar (menuBar)
     
     def onReconnect (self, event):
+        """Tenta reconectar com o Banco de Dados"""
         self.db.disconnect ()
         try:
             self.db.connect ()
@@ -60,6 +64,7 @@ class myFrame (wx.Frame):
 
 
     def onAbout (self, event):
+        """Mostra informações sobre esse app"""
         info = wx.AboutDialogInfo ()
         info.SetName ('T5 de LabBD')
         info.SetVersion ('0.0.1')
@@ -70,6 +75,7 @@ class myFrame (wx.Frame):
         wx.AboutBox (info)
 
     def onQuit (self, event):
+        """Sai do programa"""
         self.Close ()
 
 app = wx.App (False)
