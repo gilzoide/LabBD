@@ -4,12 +4,15 @@ import wx
 from dbManager import dbManager
 from tableInserter import tableInserter
 from queryLister import queryLister
+from selectPanel import selectPanel
+from insertPanel import insertPanel
 
 class myFrame (wx.Frame):
     """Nossa janela principal do LabBD"""
     # IDs úteis
     ID_RECONNECT = 100
     ID_INSERT = 101
+    ID_SELECT = 102
 
     def __init__ (self):
         wx.Frame.__init__ (self, None, wx.ID_ANY, 'LabBD', wx.DefaultPosition, wx.Size (800, 600))
@@ -19,7 +22,8 @@ class myFrame (wx.Frame):
         self.Bind (wx.EVT_MENU, self.onQuit, id = wx.ID_EXIT)
         self.Bind (wx.EVT_MENU, self.onAbout, id = wx.ID_ABOUT)
         self.Bind (wx.EVT_MENU, self.onReconnect, id = self.ID_RECONNECT)
-        #self.Bind (wx.EVT_MENU, self.onInsert, id = self.ID_INSERT)
+        self.Bind (wx.EVT_MENU, self.onSelect, id = self.ID_SELECT)
+        self.Bind (wx.EVT_MENU, self.onInsert, id = self.ID_INSERT)
 
         # abre a tela e troca o ícone
         self.Show ()
@@ -30,12 +34,13 @@ class myFrame (wx.Frame):
         self.db = dbManager ()
         self.onReconnect (None)
 
-        # teste do tableInserter
-        tab = tableInserter (self, wx.ID_ANY, wx.DefaultPosition, wx.Size (700, 500),
-                self.db, 'urna',
-                {
-                    'TIPOURNA' : ('manual', 'eletronica')
-                })
+        self.selectPanel = selectPanel (self, self.ID_SELECT, db = self.db, size = wx.Size (700, 500))
+        self.selectPanel.Show (False)
+
+        self.insertPanel = insertPanel (self, self.ID_INSERT, db = self.db, size = wx.Size (700, 500))
+        self.insertPanel.Show (False)
+
+        self.current = None
 
 
     def montaMenus (self):
@@ -50,6 +55,7 @@ class myFrame (wx.Frame):
         operacoes = wx.Menu ()
         menuBar.Append (operacoes, '&Operações')
         operacoes.Append (self.ID_INSERT, '&Inserir')
+        operacoes.Append (self.ID_SELECT, '&Mostrar tabelas')
         # Menu de ajuda
         ajuda = wx.Menu ()
         menuBar.Append (ajuda, 'A&juda')
@@ -66,6 +72,18 @@ class myFrame (wx.Frame):
         except Exception as e:
             wx.MessageBox (str (e), "Erro de conexão", wx.CENTRE + wx.ICON_ERROR + wx.OK)
             self.SetStatusText ('Não conectado')
+
+    def onSelect (self, event):
+        if self.current:
+            self.current.Show (False)
+        self.selectPanel.Show (True)
+        self.current = self.selectPanel
+
+    def onInsert (self, event):
+        if self.current:
+            self.current.Show (False)
+        self.insertPanel.Show (True)
+        self.current = self.insertPanel
 
     def onAbout (self, event):
         """Mostra informações sobre esse app"""

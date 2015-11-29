@@ -4,7 +4,7 @@ import wx
 
 class queryLister (wx.ListCtrl):
     """Tabela que lista um SELECT"""
-    def __init__ (self, parent, id, position, size):
+    def __init__ (self, parent, id = wx.ID_ANY, position = wx.DefaultPosition, size = wx.DefaultSize):
         wx.ListCtrl.__init__ (self, parent, id, position, size, wx.LC_REPORT + wx.LC_VIRTUAL)
 
     def setValues (self, colunas, valores):
