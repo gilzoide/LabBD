@@ -10,7 +10,6 @@ from insertPanel import insertPanel
 class myFrame (wx.Frame):
     """Nossa janela principal do LabBD"""
     # IDs úteis
-    ID_RECONNECT = 100
     ID_INSERT = 101
     ID_SELECT = 102
     ID_ROLLBACK = 103
@@ -30,7 +29,6 @@ class myFrame (wx.Frame):
         self.montaMenus ()
         self.Bind (wx.EVT_MENU, self.onQuit, id = wx.ID_EXIT)
         self.Bind (wx.EVT_MENU, self.onAbout, id = wx.ID_ABOUT)
-        self.Bind (wx.EVT_MENU, self.onReconnect, id = self.ID_RECONNECT)
         self.Bind (wx.EVT_MENU, self.onSelect, id = self.ID_SELECT)
         self.Bind (wx.EVT_MENU, self.onInsert, id = self.ID_INSERT)
         self.Bind (wx.EVT_MENU, self.onRollback, id = self.ID_ROLLBACK)
@@ -48,7 +46,13 @@ class myFrame (wx.Frame):
 
         # conecta com o banco de dados
         self.db = dbManager.getDbManager ()
-        self.onReconnect (None)
+        try:
+            self.db.connect ()
+            self.SetStatusText ('Conectado')
+        except Exception as e:
+            wx.MessageBox (str (e), "Erro de conexão", wx.CENTRE + wx.ICON_ERROR + wx.OK)
+            self.Close ()
+            return
 
         self.insertPanel = insertPanel (self, self.ID_INSERT, size = self.panelSize)
         self.selectPanel = selectPanel (self, self.ID_SELECT, size = self.panelSize)
@@ -61,7 +65,6 @@ class myFrame (wx.Frame):
         # Menu de arquivo
         arquivo = wx.Menu ()
         menuBar.Append (arquivo, '&Arquivo')
-        arquivo.Append (self.ID_RECONNECT, '&Reconectar', 'Tenta reconectar com o bando de dados')
         arquivo.Append (self.ID_ROLLBACK, '&Descartar modificações\tCtrl-Z', 'Descarta transação corrente')
         arquivo.Append (wx.ID_EXIT, '&Sair', 'Sai do programa')
         # Menu de operações
@@ -75,16 +78,6 @@ class myFrame (wx.Frame):
         ajuda.Append (wx.ID_ABOUT, '&Sobre', 'Mostra informação sobre o programa')
 
         self.SetMenuBar (menuBar)
-    
-    def onReconnect (self, event):
-        """Tenta reconectar com o Banco de Dados"""
-        self.db.disconnect ()
-        try:
-            self.db.connect ()
-            self.SetStatusText ('Conectado')
-        except Exception as e:
-            wx.MessageBox (str (e), "Erro de conexão", wx.CENTRE + wx.ICON_ERROR + wx.OK)
-            self.SetStatusText ('Não conectado')
 
     def onRollback (self, event):
         """Pergunta se usuário quer dar Rollback"""

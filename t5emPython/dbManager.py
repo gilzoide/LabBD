@@ -28,12 +28,6 @@ class dbManager ():
         """Tenta conectar com o banco de dados. Solta exceção se deu ruim"""
         try:
             self.conn = cx_Oracle.connect (self.login, self.password, self.dsn_tns)
-            cur = self.conn.cursor ()
-            cur.execute ('SELECT * FROM Zona')
-
-            for attr in cur.fetchall ():
-                print attr
-            cur.close ()
         except cx_Oracle.DatabaseError, exc:
             raise Exception (exc.args[0].message)
 
