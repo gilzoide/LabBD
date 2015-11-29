@@ -2,6 +2,10 @@
 
 import cx_Oracle
 
+# utf-8!
+import os
+os.environ['NLS_LANG'] = "PORTUGUESE_BRAZIL.AL32UTF8"
+
 class dbManager ():
     """Nosso gerenciador de transações com o banco de dados"""
     # Infos para conexão

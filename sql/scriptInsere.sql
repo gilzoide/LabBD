@@ -1,14 +1,3 @@
-/**
- * SCC0241 - Laboratório de Bases de Dados - Turma 3
- * Trabalho Prático 4
- *
- * Gil Barbosa Reis 8532248
- * Raul Zaninetti Rosa 8517310
- *
- * Script Insere
- */
-
-
 DROP SEQUENCE seq_zona;
 DROP SEQUENCE seq_secao;
 DROP SEQUENCE seq_urna;
@@ -78,15 +67,15 @@ INSERT INTO pessoa(nroTitEleitor, nomePessoa, endPessoa, dataNasc, escolaridade,
 INSERT INTO pessoa(nroTitEleitor, nomePessoa, endPessoa, dataNasc, escolaridade, tipoPessoa, nroZona, estadoZona, nroSecao)
   VALUES (000000000012, 'Alexandre Vannucchi Leme', 'Santiago, Chile', TO_DATE('5/7/1952','dd/mm/yyyy'), 'ensino superior', 'fisica', 3, 'SP', 6);  
 INSERT INTO pessoa(nroTitEleitor, nomePessoa, endPessoa, dataNasc, escolaridade, tipoPessoa, nroZona, estadoZona, nroSecao)
-  VALUES (000000000013, 'Alfeu de Alc�ntara Monteiro', 'Canoas, RS', TO_DATE('4/4/1964 ','dd/mm/yyyy'), 'ensino fundamental', 'fisica', 2, 'SP', 5);  
+  VALUES (000000000013, 'Alfeu de Alcântara Monteiro', 'Canoas, RS', TO_DATE('4/4/1964 ','dd/mm/yyyy'), 'ensino fundamental', 'fisica', 2, 'SP', 5);  
 INSERT INTO pessoa(nroTitEleitor, nomePessoa, endPessoa, dataNasc, escolaridade, tipoPessoa, nroZona, estadoZona, nroSecao)
-  VALUES (000000000014, 'Almir Cust�dio de Lima', 'Recife, PE', TO_DATE('24/5/1950','dd/mm/yyyy'), 'ensino fundamental', 'fisica', 1, 'SP', 1);  
+  VALUES (000000000014, 'Almir Custódio de Lima', 'Recife, PE', TO_DATE('24/5/1950','dd/mm/yyyy'), 'ensino fundamental', 'fisica', 1, 'SP', 1);  
 INSERT INTO pessoa(nroTitEleitor, nomePessoa, endPessoa, dataNasc, escolaridade, tipoPessoa, nroZona, estadoZona, nroSecao)
-  VALUES (000000000015, 'Alu�sio Palhano Pedreira Ferreira', 'Piraju�, SP', TO_DATE('5/9/1922','dd/mm/yyyy'), 'ensino superior', 'fisica', 2, 'SP', 2);  
+  VALUES (000000000015, 'Aluísio Palhano Pedreira Ferreira', 'Pirajuí, SP', TO_DATE('5/9/1922','dd/mm/yyyy'), 'ensino superior', 'fisica', 2, 'SP', 2);  
 INSERT INTO pessoa(nroTitEleitor, nomePessoa, endPessoa, dataNasc, escolaridade, tipoPessoa, nroZona, estadoZona, nroSecao)
-  VALUES (000000000016, 'Amaro Lu�z de Carvalho', 'Recife, PE', TO_DATE('22/8/1971 ','dd/mm/yyyy'), 'ensino superior', 'fisica', 2, 'SP', 5);  
+  VALUES (000000000016, 'Amaro Luíz de Carvalho', 'Recife, PE', TO_DATE('22/8/1971 ','dd/mm/yyyy'), 'ensino superior', 'fisica', 2, 'SP', 5);  
 INSERT INTO pessoa(nroTitEleitor, nomePessoa, endPessoa, dataNasc, escolaridade, tipoPessoa, nroZona, estadoZona, nroSecao)
-  VALUES (000000000017, 'Ana Maria Nacinovic Corr�a', 'Rio de Janeiro, RJ', TO_DATE('25/3/1947','dd/mm/yyyy'), 'ensino superior', 'fisica', 3, 'SP', 3);  
+  VALUES (000000000017, 'Ana Maria Nacinovic Corrêa', 'Rio de Janeiro, RJ', TO_DATE('25/3/1947','dd/mm/yyyy'), 'ensino superior', 'fisica', 3, 'SP', 3);  
 INSERT INTO pessoa(nroTitEleitor, nomePessoa, endPessoa, dataNasc, escolaridade, tipoPessoa, nroZona, estadoZona, nroSecao)
   VALUES (000000000018, 'Ana Rosa Kucinski Silva', 'Sao Paulo, SP', TO_DATE('12/1/1942','dd/mm/yyyy'), 'ensino superior', 'fisica', 2, 'SP', 5);  
 INSERT INTO pessoa(nroTitEleitor, nomePessoa, endPessoa, dataNasc, escolaridade, tipoPessoa, nroZona, estadoZona, nroSecao)
@@ -102,55 +91,55 @@ INSERT INTO pessoa(nroTitEleitor, nomePessoa, endPessoa, dataNasc, escolaridade,
 INSERT INTO pessoa(nroTitEleitor, nomePessoa, endPessoa, dataNasc, escolaridade, tipoPessoa, nroZona, estadoZona, nroSecao)
   VALUES (000000000024, 'Antogildo Pacoal Vianna', 'Araxa , MG', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 2, 'SP', 2);  
 INSERT INTO pessoa(nroTitEleitor, nomePessoa, endPessoa, dataNasc, escolaridade, tipoPessoa, nroZona, estadoZona, nroSecao)
-  VALUES (000000000025, 'Ant�nio Alfredo de Lima', 'Belo Horizonte, MG', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 2, 'SP', 5);  
+  VALUES (000000000025, 'Antônio Alfredo de Lima', 'Belo Horizonte, MG', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 2, 'SP', 5);  
 INSERT INTO pessoa(nroTitEleitor, nomePessoa, endPessoa, dataNasc, escolaridade, tipoPessoa, nroZona, estadoZona, nroSecao)
-  VALUES (000000000026, 'Ant�nio Benetazzo', 'Sao Paulo, SP', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 1, 'SP', 7);  
+  VALUES (000000000026, 'Antônio Benetazzo', 'Sao Paulo, SP', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 1, 'SP', 7);  
 INSERT INTO pessoa(nroTitEleitor, nomePessoa, endPessoa, dataNasc, escolaridade, tipoPessoa, nroZona, estadoZona, nroSecao)
-  VALUES (000000000027, 'Ant�nio Carlos Bicalho Lana', 'Sao Paulo, SP', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 3, 'SP', 6);  
+  VALUES (000000000027, 'Antônio Carlos Bicalho Lana', 'Sao Paulo, SP', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 3, 'SP', 6);  
 INSERT INTO pessoa(nroTitEleitor, nomePessoa, endPessoa, dataNasc, escolaridade, tipoPessoa, nroZona, estadoZona, nroSecao)
-  VALUES (000000000028, 'Ant�nio Carlos Monteiro Teixeira', 'Ribeirao Preto, SP', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 1, 'SP', 1);  
+  VALUES (000000000028, 'Antônio Carlos Monteiro Teixeira', 'Ribeirao Preto, SP', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 1, 'SP', 1);  
 INSERT INTO pessoa(nroTitEleitor, nomePessoa, endPessoa, dataNasc, escolaridade, tipoPessoa, nroZona, estadoZona, nroSecao)
-  VALUES (000000000029, 'Ant�nio Carlos Nogueira Cabral', 'Limeira, SP', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 1, 'SP', 4);  
+  VALUES (000000000029, 'Antônio Carlos Nogueira Cabral', 'Limeira, SP', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 1, 'SP', 4);  
 INSERT INTO pessoa(nroTitEleitor, nomePessoa, endPessoa, dataNasc, escolaridade, tipoPessoa, nroZona, estadoZona, nroSecao)
-  VALUES (000000000030, 'Ant�nio Carlos Silveira Alves', 'Campinas, SP', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 2, 'SP', 2);  
+  VALUES (000000000030, 'Antônio Carlos Silveira Alves', 'Campinas, SP', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 2, 'SP', 2);  
 INSERT INTO pessoa(nroTitEleitor, nomePessoa, endPessoa, dataNasc, escolaridade, tipoPessoa, nroZona, estadoZona, nroSecao)
-  VALUES (000000000031, 'Ant�nio de P�dua Costaa', 'Serra Negra, SP', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 3, 'SP', 3);  
+  VALUES (000000000031, 'Antônio de Pádua Costaa', 'Serra Negra, SP', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 3, 'SP', 3);  
 INSERT INTO pessoa(nroTitEleitor, nomePessoa, endPessoa, dataNasc, escolaridade, tipoPessoa, nroZona, estadoZona, nroSecao)
-  VALUES (000000000032, 'Ant�nio dos Tr�s Reis Oliveira', 'Ibitinga, SP', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 1, 'SP', 4);  
+  VALUES (000000000032, 'Antônio dos Três Reis Oliveira', 'Ibitinga, SP', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 1, 'SP', 4);  
 INSERT INTO pessoa(nroTitEleitor, nomePessoa, endPessoa, dataNasc, escolaridade, tipoPessoa, nroZona, estadoZona, nroSecao)
-  VALUES (000000000033, 'Ant�nio Ferreira Pinto', 'Jacutinga, MG', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 2, 'SP', 5);  
+  VALUES (000000000033, 'Antônio Ferreira Pinto', 'Jacutinga, MG', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 2, 'SP', 5);  
 INSERT INTO pessoa(nroTitEleitor, nomePessoa, endPessoa, dataNasc, escolaridade, tipoPessoa, nroZona, estadoZona, nroSecao)
-  VALUES (000000000034, 'Ant�nio Guilherme Ribeiro Ribas', 'Salvador, BA', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 3, 'SP', 6);  
+  VALUES (000000000034, 'Antônio Guilherme Ribeiro Ribas', 'Salvador, BA', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 3, 'SP', 6);  
 INSERT INTO pessoa(nroTitEleitor, nomePessoa, endPessoa, dataNasc, escolaridade, tipoPessoa, nroZona, estadoZona, nroSecao)
-  VALUES (000000000035, 'Ant�nio Henrique Pereira Neto', 'Salvador, BA', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 1, 'SP', 1);  
+  VALUES (000000000035, 'Antônio Henrique Pereira Neto', 'Salvador, BA', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 1, 'SP', 1);  
 INSERT INTO pessoa(nroTitEleitor, nomePessoa, endPessoa, dataNasc, escolaridade, tipoPessoa, nroZona, estadoZona, nroSecao)
-  VALUES (000000000036, 'Ant�nio Joaquim Machado', 'Sao Paulo, SP', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 2, 'SP', 2);  
+  VALUES (000000000036, 'Antônio Joaquim Machado', 'Sao Paulo, SP', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 2, 'SP', 2);  
 INSERT INTO pessoa(nroTitEleitor, nomePessoa, endPessoa, dataNasc, escolaridade, tipoPessoa, nroZona, estadoZona, nroSecao)
   VALUES (000000000037, 'Antonio Marcos Pinto de Oliveira', 'Sao Paulo, SP', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 3, 'SP', 3);  
 INSERT INTO pessoa(nroTitEleitor, nomePessoa, endPessoa, dataNasc, escolaridade, tipoPessoa, nroZona, estadoZona, nroSecao)
-  VALUES (000000000038, 'Ant�nio Raymundo Lucena', 'Sao Paulo, SP', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 1, 'SP', 4);  
+  VALUES (000000000038, 'Antônio Raymundo Lucena', 'Sao Paulo, SP', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 1, 'SP', 4);  
 INSERT INTO pessoa(nroTitEleitor, nomePessoa, endPessoa, dataNasc, escolaridade, tipoPessoa, nroZona, estadoZona, nroSecao)
-  VALUES (000000000039, 'Ant�nio S�rgio de Mattos', 'Sao Paulo, SP', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 2, 'SP', 5);  
+  VALUES (000000000039, 'Antônio Sérgio de Mattos', 'Sao Paulo, SP', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 2, 'SP', 5);  
 INSERT INTO pessoa(nroTitEleitor, nomePessoa, endPessoa, dataNasc, escolaridade, tipoPessoa, nroZona, estadoZona, nroSecao)
-  VALUES (000000000040, 'Ant�nio Teodoro de Castro', 'Sao Paulo, SP', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 3, 'SP', 6);  
+  VALUES (000000000040, 'Antônio Teodoro de Castro', 'Sao Paulo, SP', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 3, 'SP', 6);  
 INSERT INTO pessoa(nroTitEleitor, nomePessoa, endPessoa, dataNasc, escolaridade, tipoPessoa, nroZona, estadoZona, nroSecao)
   VALUES (000000000041, 'Ari da Rocha Miranda', 'Sao Paulo, SP', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 1, 'SP', 7);  
 INSERT INTO pessoa(nroTitEleitor, nomePessoa, endPessoa, dataNasc, escolaridade, tipoPessoa, nroZona, estadoZona, nroSecao)
   VALUES (000000000042, 'Ari de Oliveira Mendes Cunha', 'Sao Paulo, SP', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 1, 'SP', 1);  
 INSERT INTO pessoa(nroTitEleitor, nomePessoa, endPessoa, dataNasc, escolaridade, tipoPessoa, nroZona, estadoZona, nroSecao)
-  VALUES (000000000043, 'Arildo Valad�o', 'Te�filo Otoni, MG', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 2, 'SP', 2);  
+  VALUES (000000000043, 'Arildo Valadão', 'Teófilo Otoni, MG', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 2, 'SP', 2);  
 INSERT INTO pessoa(nroTitEleitor, nomePessoa, endPessoa, dataNasc, escolaridade, tipoPessoa, nroZona, estadoZona, nroSecao)
   VALUES (000000000044, 'Armando Teixeira Frutuosoa', 'Sao Paulo, SP', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 3, 'SP', 3);  
 INSERT INTO pessoa(nroTitEleitor, nomePessoa, endPessoa, dataNasc, escolaridade, tipoPessoa, nroZona, estadoZona, nroSecao)
   VALUES (000000000045, 'Arnaldo Cardoso Rocha', 'Sao Paulo, SP', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 1, 'SP', 4);  
 INSERT INTO pessoa(nroTitEleitor, nomePessoa, endPessoa, dataNasc, escolaridade, tipoPessoa, nroZona, estadoZona, nroSecao)
-  VALUES (000000000046, 'Arno Preis', 'Te�filo Otoni, MG', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 2, 'SP', 5);  
+  VALUES (000000000046, 'Arno Preis', 'Teófilo Otoni, MG', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 2, 'SP', 5);  
 INSERT INTO pessoa(nroTitEleitor, nomePessoa, endPessoa, dataNasc, escolaridade, tipoPessoa, nroZona, estadoZona, nroSecao)
   VALUES (000000000047, 'Ary Abreu Lima da Rosa', 'Sao Paulo, SP', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 3, 'SP', 6);  
 INSERT INTO pessoa(nroTitEleitor, nomePessoa, endPessoa, dataNasc, escolaridade, tipoPessoa, nroZona, estadoZona, nroSecao)
   VALUES (000000000048, 'Augusto Soares da Cunha', 'Sao Paulo, SP', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 1, 'SP', 7);  
 INSERT INTO pessoa(nroTitEleitor, nomePessoa, endPessoa, dataNasc, escolaridade, tipoPessoa, nroZona, estadoZona, nroSecao)
-  VALUES (000000000049, '�urea Eliza Pereira Valad�o', 'Sao Paulo, SP', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 1, 'SP', 1);  
+  VALUES (000000000049, 'Áurea Eliza Pereira Valadão', 'Sao Paulo, SP', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 1, 'SP', 1);  
 INSERT INTO pessoa(nroTitEleitor, nomePessoa, endPessoa, dataNasc, escolaridade, tipoPessoa, nroZona, estadoZona, nroSecao)
   VALUES (000000000050, 'Aurora Maria Nascimento Furtado', 'Rio de Janeiro, RJ', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 2, 'SP', 2);  
 INSERT INTO pessoa(nroTitEleitor, nomePessoa, endPessoa, dataNasc, escolaridade, tipoPessoa, nroZona, estadoZona, nroSecao)
@@ -158,11 +147,11 @@ INSERT INTO pessoa(nroTitEleitor, nomePessoa, endPessoa, dataNasc, escolaridade,
 INSERT INTO pessoa(nroTitEleitor, nomePessoa, endPessoa, dataNasc, escolaridade, tipoPessoa, nroZona, estadoZona, nroSecao)
   VALUES (000000000052, 'Aylton Adalberto Mortati', 'Rio de Janeiro, RJ', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 1, 'SP', 4);  
 INSERT INTO pessoa(nroTitEleitor, nomePessoa, endPessoa, dataNasc, escolaridade, tipoPessoa, nroZona, estadoZona, nroSecao)
-  VALUES (000000000053, 'Benedito Gon�alves', 'Rio de Janeiro, RJ', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 2, 'SP', 5);  
+  VALUES (000000000053, 'Benedito Gonçalves', 'Rio de Janeiro, RJ', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 2, 'SP', 5);  
 INSERT INTO pessoa(nroTitEleitor, nomePessoa, endPessoa, dataNasc, escolaridade, tipoPessoa, nroZona, estadoZona, nroSecao)
   VALUES (000000000054, 'Benedito Pereira Serra', 'Rio de Janeiro, RJ', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 3, 'SP', 6);  
 INSERT INTO pessoa(nroTitEleitor, nomePessoa, endPessoa, dataNasc, escolaridade, tipoPessoa, nroZona, estadoZona, nroSecao)
-  VALUES (000000000055, 'Bergson Gurj�o Farias', 'Rio de Janeiro, RJ', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 1, 'SP', 7);  
+  VALUES (000000000055, 'Bergson Gurjão Farias', 'Rio de Janeiro, RJ', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 1, 'SP', 7);  
 INSERT INTO pessoa(nroTitEleitor, nomePessoa, endPessoa, dataNasc, escolaridade, tipoPessoa, nroZona, estadoZona, nroSecao)
   VALUES (000000000056, 'Bernardino Saraiva', 'Rio de Janeiro, RJ', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 1, 'SP', 1);  
 INSERT INTO pessoa(nroTitEleitor, nomePessoa, endPessoa, dataNasc, escolaridade, tipoPessoa, nroZona, estadoZona, nroSecao)
@@ -188,9 +177,9 @@ INSERT INTO pessoa(nroTitEleitor, nomePessoa, endPessoa, dataNasc, escolaridade,
 INSERT INTO pessoa(nroTitEleitor, nomePessoa, endPessoa, dataNasc, escolaridade, tipoPessoa, nroZona, estadoZona, nroSecao)
   VALUES (000000000067, 'Cassimiro Luiz de Freitas', 'Rio de Janeiro, RJ', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 2, 'SP', 5);  
 INSERT INTO pessoa(nroTitEleitor, nomePessoa, endPessoa, dataNasc, escolaridade, tipoPessoa, nroZona, estadoZona, nroSecao)
-  VALUES (000000000068, 'Catarina Abi-E�ab', 'Rio de Janeiro, RJ', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 3, 'SP', 6);  
+  VALUES (000000000068, 'Catarina Abi-Eçab', 'Rio de Janeiro, RJ', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 3, 'SP', 6);  
 INSERT INTO pessoa(nroTitEleitor, nomePessoa, endPessoa, dataNasc, escolaridade, tipoPessoa, nroZona, estadoZona, nroSecao)
-  VALUES (000000000069, 'C�lio Augusto Guedes', 'Te�filo Otoni, MG', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 1, 'SP', 7);  
+  VALUES (000000000069, 'Célio Augusto Guedes', 'Teófilo Otoni, MG', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 1, 'SP', 7);  
 INSERT INTO pessoa(nroTitEleitor, nomePessoa, endPessoa, dataNasc, escolaridade, tipoPessoa, nroZona, estadoZona, nroSecao)
   VALUES (000000000070, 'Celso Gilberto de Oliveira', 'Belo Horizonte, MG', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 2, 'SP', 2);  
 INSERT INTO pessoa(nroTitEleitor, nomePessoa, endPessoa, dataNasc, escolaridade, tipoPessoa, nroZona, estadoZona, nroSecao)
@@ -198,11 +187,11 @@ INSERT INTO pessoa(nroTitEleitor, nomePessoa, endPessoa, dataNasc, escolaridade,
 INSERT INTO pessoa(nroTitEleitor, nomePessoa, endPessoa, dataNasc, escolaridade, tipoPessoa, nroZona, estadoZona, nroSecao)
   VALUES (000000000072, 'Cilon da Cunha Brun', 'Sao Paulo, SP', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 3, 'SP', 3);  
 INSERT INTO pessoa(nroTitEleitor, nomePessoa, endPessoa, dataNasc, escolaridade, tipoPessoa, nroZona, estadoZona, nroSecao)
-  VALUES (000000000073, 'Ciro Fl�vio Salasar Oliveira', 'Sao Paulo, SP', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 1, 'SP', 4);  
+  VALUES (000000000073, 'Ciro Flávio Salasar Oliveira', 'Sao Paulo, SP', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 1, 'SP', 4);  
 INSERT INTO pessoa(nroTitEleitor, nomePessoa, endPessoa, dataNasc, escolaridade, tipoPessoa, nroZona, estadoZona, nroSecao)
   VALUES (000000000074, 'Cloves Dias Amorim', 'Sao Paulo, SP', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 2, 'SP', 5);  
 INSERT INTO pessoa(nroTitEleitor, nomePessoa, endPessoa, dataNasc, escolaridade, tipoPessoa, nroZona, estadoZona, nroSecao)
-  VALUES (000000000075, 'Cust�dio Saraiva Neto', 'Sao Paulo, SP', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 3, 'SP', 6);  
+  VALUES (000000000075, 'Custódio Saraiva Neto', 'Sao Paulo, SP', TO_DATE('5/8/1927','dd/mm/yyyy'), 'ensino medio', 'fisica', 3, 'SP', 6);  
   
 -- Partido: nroPartido, nomePartido, siglaPartido, nroVotosP(derivado)
 CREATE SEQUENCE seq_partido START WITH 1;
@@ -229,7 +218,7 @@ INSERT INTO filia(nroTitEleitor, nroPartido) VALUES (000000000012, 6);
 INSERT INTO filia(nroTitEleitor, nroPartido) VALUES (000000000013, 1);
 
 -- Candidato: nroTitEleitor, nomeFantasia, nroCandidato, cargoCandidato, nroVotos(derivado)
-INSERT INTO Candidato (nroTitEleitor, nomeFantasia, nroCandidato, cargoCandidato,nroVotos) VALUES (1,  'Z� da Padaria',  25630, 'vereador',0);
+INSERT INTO Candidato (nroTitEleitor, nomeFantasia, nroCandidato, cargoCandidato,nroVotos) VALUES (1,  'Zé da Padaria',  25630, 'vereador',0);
 INSERT INTO Candidato (nroTitEleitor, nomeFantasia, nroCandidato, cargoCandidato,nroVotos) VALUES (2,  'Seu Juca',       43,    'governador',0);
 INSERT INTO Candidato (nroTitEleitor, nomeFantasia, nroCandidato, cargoCandidato,nroVotos) VALUES (3,  'Cumpadi Weslei', 25,    'vice-prefeito',0);
 INSERT INTO Candidato (nroTitEleitor, nomeFantasia, nroCandidato, cargoCandidato,nroVotos) VALUES (4,  NULL,             85932, 'vereador',0);
@@ -238,13 +227,13 @@ INSERT INTO Candidato (nroTitEleitor, nomeFantasia, nroCandidato, cargoCandidato
 INSERT INTO Candidato (nroTitEleitor, nomeFantasia, nroCandidato, cargoCandidato,nroVotos) VALUES (7,  'Florzita',       25,    'prefeito',0);
 INSERT INTO Candidato (nroTitEleitor, nomeFantasia, nroCandidato, cargoCandidato,nroVotos) VALUES (8,  'Docita',         25,    'presidente',0);
 INSERT INTO Candidato (nroTitEleitor, nomeFantasia, nroCandidato, cargoCandidato,nroVotos) VALUES (9,  NULL,             43,    'vice-governador',0);
-INSERT INTO Candidato (nroTitEleitor, nomeFantasia, nroCandidato, cargoCandidato,nroVotos) VALUES (10, 'M�e Joana',      42,    'prefeito',0);
+INSERT INTO Candidato (nroTitEleitor, nomeFantasia, nroCandidato, cargoCandidato,nroVotos) VALUES (10, 'Mãe Joana',      42,    'prefeito',0);
 INSERT INTO Candidato (nroTitEleitor, nomeFantasia, nroCandidato, cargoCandidato,nroVotos) VALUES (11, 'Lambreta',       86,    'presidente',0);
 INSERT INTO Candidato (nroTitEleitor, nomeFantasia, nroCandidato, cargoCandidato,nroVotos) VALUES (12, 'Cunha',          55521, 'vereador',0);
 INSERT INTO Candidato (nroTitEleitor, nomeFantasia, nroCandidato, cargoCandidato,nroVotos) VALUES (13, NULL,             97,    'vice-governador',0);
 INSERT INTO Candidato (nroTitEleitor, nomeFantasia, nroCandidato, cargoCandidato,nroVotos) VALUES (14, NULL,             97,    'governador',0);
 INSERT INTO Candidato (nroTitEleitor, nomeFantasia, nroCandidato, cargoCandidato,nroVotos) VALUES (15, 'Dona Marina',    50,    'prefeito',0);
-INSERT INTO Candidato (nroTitEleitor, nomeFantasia, nroCandidato, cargoCandidato,nroVotos) VALUES (16, 'Pa�oca',         42,    'vice-prefeito',0);
+INSERT INTO Candidato (nroTitEleitor, nomeFantasia, nroCandidato, cargoCandidato,nroVotos) VALUES (16, 'Paçoca',         42,    'vice-prefeito',0);
 INSERT INTO Candidato (nroTitEleitor, nomeFantasia, nroCandidato, cargoCandidato,nroVotos) VALUES (17, 'Patati',         30,    'vice-presidente',0);
 
 -- EhViceDe: nroTitEleitorPrincipal, nroTitEleitorVice

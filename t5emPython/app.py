@@ -14,12 +14,10 @@ class myFrame (wx.Frame):
     ID_SELECT = 102
     ID_ROLLBACK = 103
 
-    # Flag que marca se algo mudou na base de dados
-    algoMudou = False
     # Painel atual
     current = None
     # Tamanho padrão pra painéis
-    panelSize = wx.Size (750, 500)
+    panelSize = wx.Size (790, 500)
 
     def __init__ (self):
         wx.Frame.__init__ (self, None, wx.ID_ANY, 'LabBD', wx.DefaultPosition, wx.Size (800, 600))

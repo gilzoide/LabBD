@@ -9,7 +9,6 @@
  */
 
 
-
 /* Altera configura��es importante da se��o */
 ALTER SESSION SET NLS_LANGUAGE= 'PORTUGUESE' NLS_TERRITORY= 'BRAZIL';
 ALTER SESSION SET deferred_segment_creation = FALSE;

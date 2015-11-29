@@ -135,41 +135,6 @@ CREATE OR REPLACE TRIGGER atualiza_pessoa_secao
   END IF;
 END;
 /
-/* selects para mostrar que os gatilhos funcionaram
-  precisam ser rodados depois de dar os inserts */
-  SELECT nroVotosP FROM partido;
-  SELECT nroVotos FROM candidato;
-  SELECT qtdEleitoresZ FROM zona;
-  SELECT qtdEleitoresS FROM secao;
-
-
- 
-
-
-
---gatilho de tabela mutante
-
-/* criação de um gatilho comum que gera tabela mutante
-O gatilho tenta ao mesmo tempo que esta sendo inserido na tabela urna um tipo de urna manual, transformá-la em automática usando o comando update (gerando assim tabela mutante ao tentar inserir). */
-CREATE OR REPLACE TRIGGER atualiza_urna AFTER INSERT ON urna
-FOR EACH ROW
-BEGIN
-    IF :new.tipoUrna = 'manual' THEN
-      UPDATE urna
-      SET tipoUrna = 'automatico'
-      WHERE nroZona = :new.nroZona
-      AND estadoZona = :new.estadoZona
-      AND nroSecao = :new.nroSecao
-      AND nroUrna = :new.nroUrna
-      AND modelo = :new.modelo;
-    END IF;
-END;
-/
---tentar inserir uma nova tupla na tabela urna para mostrar o erro de tabela mutante
-INSERT INTO urna VALUES(1,'SP',1,20,'A','manual');
-
--- drop nesse trigger para poder criar o proximo
-DROP TRIGGER atualiza_urna;
 
 --gatilho que resolve o problema de tabela mutante
 CREATE OR REPLACE TRIGGER atualiza_urnac FOR INSERT ON urna
@@ -203,28 +168,3 @@ BEGIN
 END AFTER STATEMENT;
 END;
 /
-/*faz a mesma inserção tentada la em cima. porém agora ela funciona e faz a atualização de urna manual para automática */ 
-INSERT INTO urna VALUES(1,'SP',1,20,'A','manual');
-
---select para mostrar que o insert funcionou certo
-SELECT nroZona, estadoZona, nroSecao, nroUrna, modelo, tipoUrna FROM urna;
-
---resultado do select 
-/*
-1    SP    1    1    A    eletronica
-2    SP    2    2    A    manual
-3    SP    3    3    A    eletronica
-1    SP    4    4    A    manual
-2    SP    5    5    A    eletronica
-3    SP    6    6    A    manual
-1    SP    7    7    B    eletronica
-2    SP    2    8    B    manual
-3    SP    3    9    B    eletronica
-1    SP    4    10    A    manual
-2    SP    5    11    A    eletronica
-3    SP    6    12    A    manual
-1    SP    7    13    B    eletronica
-2    SP    5    14    B    manual
-3    SP    6    15    B    eletronica
-1    SP    7    16    C    manual
-1    SP    1    20    A    automatica */
