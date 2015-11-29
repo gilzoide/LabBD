@@ -1,15 +1,16 @@
 /**
- * SCC0241 - Laboratório de Bases de Dados - Turma 3
- * Trabalho Prático 1
+ * SCC0241 - Laborat�rio de Bases de Dados - Turma 3
+ * Trabalho Pr�tico 1
  *
  * Gil Barbosa Reis 8532248
  * Raul Zaninetti Rosa 8517310
  *
- * Script de criacao de dados no esquema eleições
+ * Script de criacao de dados no esquema elei��es
  */
 
 
-/* Altera configurações importante da seção */
+
+/* Altera configura��es importante da se��o */
 ALTER SESSION SET NLS_LANGUAGE= 'PORTUGUESE' NLS_TERRITORY= 'BRAZIL';
 ALTER SESSION SET deferred_segment_creation = FALSE;
 
@@ -29,16 +30,16 @@ DROP TABLE zona;
 /**
 * Tabela zona
 * @nroZona, estadoZona     chave primaria
-* @endZona                 endereço da zona eleitoral
+* @endZona                 endere�o da zona eleitoral
 * @qtdEleitoresZ           quantidade de eleitores naquela zona 
-* @pk_zona                 restrição da chave primária
+* @pk_zona                 restri��o da chave prim�ria
 */
 
 CREATE TABLE zona(
   nroZona NUMBER(5) NOT NULL,
   estadoZona CHAR(2) NOT NULL,
   endZona VARCHAR2(40),
-  qtdEleitoresZ NUMBER,
+  qtdEleitoresZ NUMBER DEFAULT 0,
   CONSTRAINT pk_zona PRIMARY KEY (nroZona, estadoZona)
 );
 
@@ -46,11 +47,11 @@ CREATE TABLE zona(
 /**
 * Tabela secao
 * @nroZona, estadoZona, nroSecao      chave primaria
-* @endZona                            endereço da zona eleitoral
-* @localSecao                         localização da secao
+* @endZona                            endere�o da zona eleitoral
+* @localSecao                         localiza��o da secao
 * @qtdEleitoresS                      numero de eleitores em uma determinada secao
-* @pk_secao                           restrição da chave primária
-* @fk_secao                           restrição da chave estrangeira vinda da tabela zona
+* @pk_secao                           restri��o da chave prim�ria
+* @fk_secao                           restri��o da chave estrangeira vinda da tabela zona
 */
 
 CREATE TABLE secao(
@@ -58,7 +59,7 @@ CREATE TABLE secao(
   estadoZona CHAR(2) NOT NULL,
   nroSecao NUMBER(3) NOT NULL,
   localSecao VARCHAR2(30),
-  qtdEleitoresS NUMBER,
+  qtdEleitoresS NUMBER DEFAULT 0,
   CONSTRAINT pk_secao PRIMARY KEY (nroZona, estadoZona, nroSecao),
   CONSTRAINT fk_secao FOREIGN KEY (nroZona, estadoZona) REFERENCES zona (nroZona, estadoZona)
 );
@@ -68,8 +69,8 @@ CREATE TABLE secao(
 * @nroZona, estadoZona, nroSecao, nroUrna      chave primaria
 * @modelo                                      modelo da urna
 * @tipoUrna                                    uma urna pode ser do tipo manual ou eletronica
-* @pk_urna                                     restrição da chave primária
-* @fk_urna                                     restrição da chave estrangeira vinda da tabela secao
+* @pk_urna                                     restri��o da chave prim�ria
+* @fk_urna                                     restri��o da chave estrangeira vinda da tabela secao
 * @ch_urna                                     checagem se o tipoUrna esta nos tipos permitidos
 */
 
@@ -90,15 +91,15 @@ CREATE TABLE urna(
 * Tabela pessoa
 * @nroTilEleitor      chave primaria
 * @nomePessoa         nome da pessoa cadastrada
-* @endPessoa          endereço da pessoa
+* @endPessoa          endere�o da pessoa
 * @dataNasc           data de nascimento
 * @escolaridade       escolaridade da pessoa
 * @tipoPessoa         tipo pessoa
 * @nroZona            numero da zona de voto
 * @estadoZona         estado que se encontra a zona de votacao
 * @nroSecao           numero de secao
-* @pk_pessoa          restrição da chave primária
-* @fk_pessoa          restrição da chave estrangeira vinda da tabela secao
+* @pk_pessoa          restri��o da chave prim�ria
+* @fk_pessoa          restri��o da chave estrangeira vinda da tabela secao
 */
 
 CREATE TABLE pessoa(
@@ -121,23 +122,23 @@ CREATE TABLE pessoa(
 * @nomePartido    nome do partido
 * @siglaPartido   sigla do partido
 * @nroVotosP      numero de votos do partido
-* @pk_partido     restrição de chave primária
+* @pk_partido     restri��o de chave prim�ria
 */
 CREATE TABLE partido(
   nroPartido NUMBER(5) NOT NULL,
   nomePartido VARCHAR2(50) NOT NULL,
   siglaPartido VARCHAR2(4),
-  nroVotosP NUMBER,
+  nroVotosP NUMBER DEFAULT 0,
   CONSTRAINT pk_partido PRIMARY KEY (nroPartido)
 );
 
 /**
 * Tabela  filia
-* @nroTitEleitor      chave primária
+* @nroTitEleitor      chave prim�ria
 * @nroPartido         numero do partido
-* @pk_filia           restrição de chave primária
-* @fk_filia_eleitor   restrição de chave estrangeira vinda de pessoa
-* @fk_filia_partido   restrição de chave estrangeira vinda de partido
+* @pk_filia           restri��o de chave prim�ria
+* @fk_filia_eleitor   restri��o de chave estrangeira vinda de pessoa
+* @fk_filia_partido   restri��o de chave estrangeira vinda de partido
 */
 
 CREATE TABLE filia(
@@ -155,16 +156,16 @@ CREATE TABLE filia(
 * @nroCandidato     numero candidato
 * @cargoCandidato   cargo candidato
 * @nroVotos         numero de votos
-* @pk_candidato     restrição de chave primaria
-* @fk_candidato     restrição de chave estrangeira vinda de pessoa
-* @ch_candidato     verificação se no campo cargoCandidato foi inserido apenas os tipos propostos 
+* @pk_candidato     restri��o de chave primaria
+* @fk_candidato     restri��o de chave estrangeira vinda de pessoa
+* @ch_candidato     verifica��o se no campo cargoCandidato foi inserido apenas os tipos propostos 
 */
 CREATE TABLE candidato(
   nroTitEleitor NUMBER(14) NOT NULL,
   nomeFantasia VARCHAR2(40),
   nroCandidato NUMBER(5) NOT NULL,
   cargoCandidato VARCHAR2(20),
-  nroVotos NUMBER,
+  nroVotos NUMBER DEFAULT 0,
   CONSTRAINT pk_candidato PRIMARY KEY (nroTitEleitor),
   CONSTRAINT fk_candidato FOREIGN KEY (nroTitEleitor) REFERENCES pessoa (nroTitEleitor),
   CONSTRAINT ch_candidato CHECK (LOWER (cargoCandidato) IN ('presidente','vice-presidente','governador','vice-governador','prefeito','vice-prefeito','vereador'))
@@ -174,9 +175,9 @@ CREATE TABLE candidato(
 * Tabela ehViceDe
 * @nroTitEleitorPrincipal     chave primaria
 * @nroTitEleitorVice          numero do titulo de eleitor do vice candidato
-* @pk_ehViceDe                restrição de chave primária
-* @fk_ehViceDe_principal      restrição de chave estrangeira vinda de candidato
-* @fk_ehViceDe_vice           restrição de chave estrangeira vinda de candidato
+* @pk_ehViceDe                restri��o de chave prim�ria
+* @fk_ehViceDe_principal      restri��o de chave estrangeira vinda de candidato
+* @fk_ehViceDe_vice           restri��o de chave estrangeira vinda de candidato
 */
 
 CREATE TABLE ehViceDe(
@@ -192,11 +193,11 @@ CREATE TABLE ehViceDe(
 * @nroTitEleitor            chave primaria
 * @cargoFunc               cargo do funcionario
 * @nroZona                 numero da zona
-* @estadoZona              estado de localização da zona
+* @estadoZona              estado de localiza��o da zona
 * @nroSecao                numero de secao
-* @pk_funcionario          resrição de chave primaria
-* @fk_funcionario_eleitor  restrição de chave estrangeira vinda depessoa
-* @fk_funcionario          restrição de chave estrangeira vinda de secao
+* @pk_funcionario          resri��o de chave primaria
+* @fk_funcionario_eleitor  restri��o de chave estrangeira vinda depessoa
+* @fk_funcionario          restri��o de chave estrangeira vinda de secao
 * @ch_funcionario          verifica se cargoFunc esta entre as possibilidades listadas no CHECK
 */
 
@@ -215,9 +216,9 @@ CREATE TABLE funcionario(
 /**
 * Tabela votoCandidato
 * @nroTitEleitor, nroZona, estadoZona, nroSecao, nroUrna, idVotoC chaves primaria
-* @pk_votoCandidato                                               resrição de chave primaria
-* @fk_votoCandidato_candidato                                     restrição de chave estrangeira vinda de candidato
-* @fk_votoCandidato_urna                                          restrição de chave estrangeira vinda de urna
+* @pk_votoCandidato                                               resri��o de chave primaria
+* @fk_votoCandidato_candidato                                     restri��o de chave estrangeira vinda de candidato
+* @fk_votoCandidato_urna                                          restri��o de chave estrangeira vinda de urna
 */
 
 CREATE TABLE votoCandidato(
@@ -235,9 +236,9 @@ CREATE TABLE votoCandidato(
 /**
 * Tabela votoPartido
 * @nroPartido, nroZona, estadoZona, nroSecao, nroUrna, idVotoP  chaves primarias
-* @pk_votoPartido                                               resrição de chave primaria  
-* @fk_votoPartido_partido                                       restrição de chave estrangeira vinda de partido
-* @fk_votoPartido_urna                                          restrição de chave estrangeira vinda de urna    
+* @pk_votoPartido                                               resri��o de chave primaria  
+* @fk_votoPartido_partido                                       restri��o de chave estrangeira vinda de partido
+* @fk_votoPartido_urna                                          restri��o de chave estrangeira vinda de urna    
 */  
 
 CREATE TABLE votoPartido(
