@@ -17,7 +17,7 @@ class dbManager ():
             cur = self.conn.cursor ()
             cur.execute ('SELECT * FROM Zona')
 
-            for attr in cur:
+            for attr in cur.fetchall ():
                 print attr
             cur.close ()
         except cx_Oracle.DatabaseError, exc:
@@ -27,6 +27,11 @@ class dbManager ():
         cur = self.conn.cursor ()
         cur.execute ('SELECT ' + what + ' FROM ' + fromWhat)
         return cur.description, cur.fetchall ()
+
+    def getTableInfo (self, tableName):
+        cur = self.conn.cursor ()
+        cur.execute ('SELECT * FROM ' + tableName)
+        return cur.description
 
     def disconnect (self):
         if self.conn:

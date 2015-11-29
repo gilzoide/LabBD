@@ -2,6 +2,7 @@
 
 import wx
 from dbManager import dbManager
+from tableInserter import tableInserter
 from queryLister import queryLister
 
 class myFrame (wx.Frame):
@@ -27,10 +28,8 @@ class myFrame (wx.Frame):
         self.db = dbManager ()
         self.onReconnect (None)
 
-        # teste do queryLister
-        lister = queryLister (self, wx.ID_ANY, wx.DefaultPosition, wx.Size (700, 500))
-        colunas, valores = self.db.select ('*', 'Pessoa WHERE nroZona = 1')
-        lister.setValues (colunas, valores)
+        # teste do tableInserter
+        tab = tableInserter (self, wx.ID_ANY, wx.DefaultPosition, wx.Size (700, 500), self.db, 'zona')
 
 
     def montaMenus (self):
