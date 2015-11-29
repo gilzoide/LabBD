@@ -9,6 +9,7 @@ class myFrame (wx.Frame):
     """Nossa janela principal do LabBD"""
     # IDs úteis
     ID_RECONNECT = 100
+    ID_INSERT = 101
 
     def __init__ (self):
         wx.Frame.__init__ (self, None, wx.ID_ANY, 'LabBD', wx.DefaultPosition, wx.Size (800, 600))
@@ -18,6 +19,7 @@ class myFrame (wx.Frame):
         self.Bind (wx.EVT_MENU, self.onQuit, id = wx.ID_EXIT)
         self.Bind (wx.EVT_MENU, self.onAbout, id = wx.ID_ABOUT)
         self.Bind (wx.EVT_MENU, self.onReconnect, id = self.ID_RECONNECT)
+        #self.Bind (wx.EVT_MENU, self.onInsert, id = self.ID_INSERT)
 
         # abre a tela e troca o ícone
         self.Show ()
@@ -29,7 +31,11 @@ class myFrame (wx.Frame):
         self.onReconnect (None)
 
         # teste do tableInserter
-        tab = tableInserter (self, wx.ID_ANY, wx.DefaultPosition, wx.Size (700, 500), self.db, 'zona')
+        tab = tableInserter (self, wx.ID_ANY, wx.DefaultPosition, wx.Size (700, 500),
+                self.db, 'urna',
+                {
+                    'TIPOURNA' : ('manual', 'eletronica')
+                })
 
 
     def montaMenus (self):
@@ -43,6 +49,7 @@ class myFrame (wx.Frame):
         # Menu de operações
         operacoes = wx.Menu ()
         menuBar.Append (operacoes, '&Operações')
+        operacoes.Append (self.ID_INSERT, '&Inserir')
         # Menu de ajuda
         ajuda = wx.Menu ()
         menuBar.Append (ajuda, 'A&juda')
@@ -59,8 +66,6 @@ class myFrame (wx.Frame):
         except Exception as e:
             wx.MessageBox (str (e), "Erro de conexão", wx.CENTRE + wx.ICON_ERROR + wx.OK)
             self.SetStatusText ('Não conectado')
-
-
 
     def onAbout (self, event):
         """Mostra informações sobre esse app"""
