@@ -17,7 +17,21 @@ class dbManager ():
     # A conexão em si
     conn = None
     # As tabelas importantes para CRUD
-    TABELAS_IMPORTANTES = ('Zona', 'Secao', 'Urna', 'Pessoa', 'Partido')
+    TABELAS_IMPORTANTES = ('Zona', 'Secao', 'Urna', 'Pessoa', 'Partido', 'Funcionario',
+            'Candidato')
+
+    RESTRICOES = {
+                'Zona' : { 'QTDELEITORESZ' : 'ignore' },
+                'Secao' : { 'QTDELEITORESS' : 'ignore' },
+                'Urna' : { 'TIPOURNA' : ('manual', 'eletronica') },
+                'Candidato' : {
+                    'CARGOCANDIDATO' : ('presidente', 'vice-presidente', 'governador',
+                        'vice-governador', 'prefeito', 'vice-prefeito', 'vereador')
+                },
+                'Funcionario' : {
+                    'CARGOFUNC' : ('mesario','presidente','secretario','suplente')
+                },
+            }
 
     # A instância única, Singleton
     instance = None

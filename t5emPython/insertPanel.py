@@ -12,7 +12,8 @@ class insertPanel (wx.Panel):
         # cria o Notebook, cada aba um INSERT
         self.note = wx.Notebook (self, style = wx.NB_TOP, size = size)
         for tabela in dbManager.TABELAS_IMPORTANTES:
-            pagina = tableInserter (self.note, wx.ID_ANY, position, size, tabela)
+            pagina = tableInserter (self.note, wx.ID_ANY, position, size, tabela,
+                    obs = dbManager.RESTRICOES.get (tabela) or {})
             self.note.AddPage (pagina, tabela)
 
 
