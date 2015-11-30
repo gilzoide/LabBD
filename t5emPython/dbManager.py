@@ -6,6 +6,19 @@ import cx_Oracle
 import os
 os.environ['NLS_LANG'] = "PORTUGUESE_BRAZIL.AL32UTF8"
 
+class fk ():
+    """Classe que descreve uma relação de parentesco entre chaves: Foreign Keys"""
+    def __init__ (self, tabelaPai, chaves):
+        self.tabela = tabelaPai
+        self.chaves = chaves
+
+    def getKeys (self):
+        db = dbManager.getDbManager ()
+        _, valores = db.select (','.join (self.chaves), self.tabela)
+        def junta (tupla):
+            return ','.join (map (str, tupla))
+        return map (junta, valores)
+
 class dbManager ():
     """Nosso gerenciador de transações com o banco de dados"""
     # Infos para conexão
@@ -22,8 +35,25 @@ class dbManager ():
 
     RESTRICOES = {
                 'Zona' : { 'QTDELEITORESZ' : 'ignore' },
-                'Secao' : { 'QTDELEITORESS' : 'ignore' },
-                'Urna' : { 'TIPOURNA' : ('manual', 'eletronica') },
+                'Secao' : {
+                    'NROZONA' : 0,
+                    'ESTADOZONA' : 0,
+                    'QTDELEITORESS' : 'ignore',
+                    'fks' : [fk ('Zona', ['NROZONA', 'ESTADOZONA'])],
+                },
+                'Urna' : {
+                    'NROZONA' : 0,
+                    'ESTADOZONA' : 0,
+                    'NROSECAO' : 0,
+                    'TIPOURNA' : ('manual', 'eletronica'),
+                    'fks' : [fk ('Secao', ['NROZONA', 'ESTADOZONA', 'NROSECAO'])]
+                },
+                'Pessoa' : {
+                    'NROZONA' : 0,
+                    'ESTADOZONA' : 0,
+                    'NROSECAO' : 0,
+                    'fks' : [fk ('Secao', ['NROZONA', 'ESTADOZONA', 'NROSECAO'])]
+                },
                 'Candidato' : {
                     'CARGOCANDIDATO' : ('presidente', 'vice-presidente', 'governador',
                         'vice-governador', 'prefeito', 'vice-prefeito', 'vereador')

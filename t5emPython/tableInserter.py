@@ -3,11 +3,13 @@
 import wx
 import cx_Oracle
 from wx.lib.intctrl import IntCtrl
-from dbManager import dbManager
+from dbManager import dbManager, fk
 
 class tableInserter (wx.Panel):
     # Id do botão, pra rolar callback
     ID_INSERT = 100
+    ID_FK = 101
+
     def __init__ (self, parent, id, position, size, tabela, obs = {}):
         """Ctor. 'obs' é um dicionário que mostra algumas observações sobre
         alguns campos (por nome), como por exemplo CONSTRAINTs de vários tipos.
@@ -26,21 +28,49 @@ class tableInserter (wx.Panel):
 
         sizer = wx.BoxSizer (wx.VERTICAL)
         self.SetSizer (sizer)
+        # primeira coisa (se tiver), põe as opções de FKs
+        if obs.get ('fks'):
+            # nossa lista de campos dependentes de FK
+            self.fkCtrlList = []
+            self.fks = obs['fks']
+            self.fkChoices = []
+            for i, fk in enumerate (self.fks):
+                # descobre quais são as possíveis fks, e mostra pa nóis
+                txt = wx.StaticText (self, wx.ID_ANY, 'FK' + str (i))
+                chaves = fk.getKeys ()
+                ctrl = wx.Choice (self, id = self.ID_FK + i, choices = chaves)
+                self.fkChoices.append (ctrl)
+                # e adiciona no BoxSizer
+                hbox = wx.BoxSizer (wx.HORIZONTAL)
+                hbox.Add (txt, flag = wx.CENTER | wx.RIGHT, border = 10)
+                hbox.Add (ctrl, proportion = 1)
+                sizer.Add (hbox, flag = wx.EXPAND)
+                # adiciona uma posição no fkCtrls
+                self.fkCtrlList.append ([])
+                self.Bind (wx.EVT_CHOICE, self.atualizaFks, id = self.ID_FK + i)
+
         for c in colunas:
             observacao = obs.get (c[0])
             # Nada de ignorar, comportamento básico: "Label [ctrl]"
             if observacao != 'ignore':
                 txt = wx.StaticText (self, wx.ID_ANY, c[0])
                 ## Cada tipo de dados pede um input diferente, digo bora ##
+                # FKs: busca qual que tem
+                if type (observacao) is int:
+                    ctrl = wx.TextCtrl (self)
+                    # salva o textCtrl, pra que possamos completar quando as FKs
+                    # forem selecionadas
+                    self.fkCtrlList[observacao].append (ctrl)
                 # Número: IntCtrl, com máximo e mínimo
-                if c[1] == cx_Oracle.NUMBER:
+                elif c[1] is cx_Oracle.NUMBER:
                     ctrl = IntCtrl (self, min = 0, max = c[4] and 10 ** c[4] or None)
                 # Data: DatePickerCtrl, pq né
-                elif c[1] == cx_Oracle.DATETIME:
+                elif c[1] is cx_Oracle.DATETIME:
                     ctrl = wx.DatePickerCtrl (self)
                 # Enum (CHAR/VARCHAR2 com CHECK): Choice com as possibilidades
                 elif type (observacao) is tuple:
                     ctrl = wx.Choice (self, choices = observacao)
+                    ctrl.SetSelection (0)
                 # String (CHAR/VARCHAR2): TextCtrl
                 else:
                     ctrl = wx.TextCtrl (self)
@@ -57,6 +87,16 @@ class tableInserter (wx.Panel):
         sizer.Add ((-1, 20))
         sizer.Add (addButton, flag = wx.ALIGN_CENTER)
         self.Bind (wx.EVT_BUTTON, self.insere, id = self.ID_INSERT)
+
+    def atualizaFks (self, event):
+        """Ao selecionar uma FK, completa os campos relacionados"""
+        campos = event.GetString ().split (',')
+        for i, ctrl in enumerate (self.fkCtrlList[self.ID_FK - event.GetId ()]):
+            ctrl.SetValue (campos[i])
+
+    def refresh (self):
+        """Atualiza os campos de FKs"""
+        pass
 
     def insere (self, event):
         # colunas e valores a inserir

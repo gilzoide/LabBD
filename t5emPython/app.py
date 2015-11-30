@@ -48,7 +48,7 @@ class myFrame (wx.Frame):
             self.db.connect ()
             self.SetStatusText ('Conectado')
         except Exception as e:
-            wx.MessageBox (str (e), "Erro de conexão", wx.CENTRE + wx.ICON_ERROR + wx.OK)
+            wx.MessageBox (str (e), "Erro de conexão", wx.CENTRE | wx.ICON_ERROR | wx.OK)
             self.Close ()
             return
 
