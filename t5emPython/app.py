@@ -7,6 +7,7 @@ from tableInserter import tableInserter
 from queryLister import queryLister
 from selectPanel import selectPanel
 from insertPanel import insertPanel
+from relatorioPanel import relatorioPanel
 
 class myFrame (wx.Frame):
     """Nossa janela principal do LabBD"""
@@ -14,14 +15,17 @@ class myFrame (wx.Frame):
     ID_INSERT = 101
     ID_SELECT = 102
     ID_ROLLBACK = 103
+    ID_RELATORIO = 104
 
     # Painel atual
     current = None
+    # Tamanho do frame
+    frameSize = wx.Size (1024, 768)
     # Tamanho padrão pra painéis
-    panelSize = wx.Size (790, 500)
+    panelSize = frameSize - wx.Size (10, 100)
 
     def __init__ (self):
-        wx.Frame.__init__ (self, None, wx.ID_ANY, 'LabBD', wx.DefaultPosition, wx.Size (800, 600))
+        wx.Frame.__init__ (self, None, wx.ID_ANY, 'LabBD', wx.DefaultPosition, self.frameSize)
         self.CreateStatusBar ()
 
         # Menus
@@ -31,6 +35,7 @@ class myFrame (wx.Frame):
         self.Bind (wx.EVT_MENU, self.onSelect, id = self.ID_SELECT)
         self.Bind (wx.EVT_MENU, self.onInsert, id = self.ID_INSERT)
         self.Bind (wx.EVT_MENU, self.onRollback, id = self.ID_ROLLBACK)
+        self.Bind (wx.EVT_MENU, self.onRelatorio, id = self.ID_RELATORIO)
 
         # Atalhos do teclado
         atalhos = wx.AcceleratorTable ([
@@ -54,6 +59,7 @@ class myFrame (wx.Frame):
             return
 
         self.insertPanel = insertPanel (self, self.ID_INSERT, size = self.panelSize)
+        self.relatorioPanel = relatorioPanel (self, self.ID_RELATORIO, size = self.panelSize)
         self.selectPanel = selectPanel (self, self.ID_SELECT, size = self.panelSize)
 
         self.current = self.selectPanel
@@ -69,8 +75,9 @@ class myFrame (wx.Frame):
         # Menu de operações
         operacoes = wx.Menu ()
         menuBar.Append (operacoes, '&Operações')
-        operacoes.Append (self.ID_INSERT, '&Inserir')
-        operacoes.Append (self.ID_SELECT, '&Mostrar tabelas')
+        operacoes.Append (self.ID_INSERT, '&Inserir', "Painel de inserção no BD")
+        operacoes.Append (self.ID_SELECT, '&Mostrar tabelas', "Tabelas de dados")
+        operacoes.Append (self.ID_RELATORIO, '&Gerar relatórios', "Painel de geração de relatórios")
         # Menu de ajuda
         ajuda = wx.Menu ()
         menuBar.Append (ajuda, 'A&juda')
@@ -84,6 +91,10 @@ class myFrame (wx.Frame):
             self.db.rollback ()
             self.SetStatusText ("Rollback executado")
             self.algoMudou ()
+
+    def onRelatorio (self, event):
+        """Abre janela dos relatórios"""
+        self.changePanel (self.relatorioPanel)
 
     def onSelect (self, event):
         self.changePanel (self.selectPanel)

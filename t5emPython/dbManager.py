@@ -77,6 +77,9 @@ class dbManager ():
         """Tenta conectar com o banco de dados. Solta exceção se deu ruim"""
         try:
             self.conn = cx_Oracle.connect (self.login, self.password, self.dsn_tns)
+            # ativa output
+            cur = self.conn.cursor ()
+            cur.callproc ('dbms_output.enable', [99999999])
         except cx_Oracle.DatabaseError, exc:
             raise Exception (exc.args[0].message)
 
@@ -114,7 +117,18 @@ class dbManager ():
             cur.execute (string)
         except cx_Oracle.DatabaseError, exc:
             raise Exception (exc.args[0].message)
-        
+
+    def procedure (self, proc, args):
+        """Executa uma procedure, pos relatório e pá"""
+        cur = self.conn.cursor ()
+        cur.callproc (proc, args)
+        s = ' ' * 1000
+        n = 0
+        strs = []
+        while not n:
+            s, n = cur.callproc ('DBMS_OUTPUT.GET_LINE', (s, n))
+            strs.append (s)
+        return '\n'.join (strs[:-1])
 
     def getTableInfo (self, tabela):
         """Retorna a lista de colunas da tabela 'tableName'"""

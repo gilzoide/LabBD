@@ -112,7 +112,7 @@ BEGIN
     WHERE idade_candidato(pessoa.dataNasc, idadeInicial, IdadeFinal) = 1;
 
   dbms_output.put_line( RPAD ('Nome Candidato', 40) || RPAD ('Nome Fantasia', 30) || RPAD ('Endereço', 25) || 'Data Nascimento');
-  dbms_output.put_line('_____________________________________________________________________________________________________________');
+  dbms_output.put_line('______________________________________________________________________________________________________________');
   OPEN cursor_candidato;
   LOOP
     FETCH cursor_candidato INTO variavel_cursor;
@@ -120,7 +120,7 @@ BEGIN
     dbms_output.put_line(RPAD (variavel_cursor.nomePessoa, 40) || RPAD (COALESCE (variavel_cursor.nomeFantasia, ' '), 30) || RPAD (variavel_cursor.endPessoa, 25) || variavel_cursor.dataNasc);
   END LOOP;
   CLOSE cursor_candidato;
-  dbms_output.put_line('_____________________________________________________________________________________________________________');
+  dbms_output.put_line('______________________________________________________________________________________________________________');
   dbms_output.put_line('Numero total de votos: ' || RPAD (numero_votos, 16) || ' Média de votos: ' || RTRIM (RPAD (ROUND(media_votos,10), 13), '0') || ' Desvio Padrão: ' || RTRIM (RPAD (desvio_padrao(idadeInicial, idadeFinal), 25), '0'));
   dbms_output.put_line('--------------------------------------------------------------------------------------------------------------');
   dbms_output.put_line(' ');
