@@ -55,14 +55,8 @@ class tableInserter (wx.Panel):
             if observacao != 'ignore':
                 txt = wx.StaticText (self, wx.ID_ANY, c[0])
                 ## Cada tipo de dados pede um input diferente, digo bora ##
-                # FKs: busca qual que tem
-                if type (observacao) is int:
-                    ctrl = wx.TextCtrl (self)
-                    # salva o textCtrl, pra que possamos completar quando as FKs
-                    # forem selecionadas
-                    self.fkCtrlList[observacao].append (ctrl)
                 # Número: IntCtrl, com máximo e mínimo
-                elif c[1] is cx_Oracle.NUMBER:
+                if c[1] is cx_Oracle.NUMBER:
                     ctrl = IntCtrl (self, min = 0, max = c[4] and 10 ** c[4] or None)
                 # Data: DatePickerCtrl, pq né
                 elif c[1] is cx_Oracle.DATETIME:
@@ -74,6 +68,13 @@ class tableInserter (wx.Panel):
                 # String (CHAR/VARCHAR2): TextCtrl
                 else:
                     ctrl = wx.TextCtrl (self)
+
+                # FKs: salva o Ctrl na lista de Ctrls das FKs
+                if type (observacao) is int:
+                    # salva o Ctrl, pra que possamos completar quando as FKs
+                    # forem selecionadas
+                    self.fkCtrlList[observacao].append (ctrl)
+
                 # adiciona o "Label [ctrl]" no BoxSizer, pra ficar tudo bonitão
                 hbox = wx.BoxSizer (wx.HORIZONTAL)
                 hbox.Add (txt, flag = wx.CENTER | wx.RIGHT, border = 10)
@@ -92,7 +93,10 @@ class tableInserter (wx.Panel):
         """Ao selecionar uma FK, completa os campos relacionados"""
         campos = event.GetString ().split (',')
         for i, ctrl in enumerate (self.fkCtrlList[self.ID_FK - event.GetId ()]):
-            ctrl.SetValue (campos[i])
+            valor = campos[i]
+            if type (ctrl) is IntCtrl:
+                valor = int (valor)
+            ctrl.SetValue (valor)
 
     def refresh (self):
         """Atualiza os campos de FKs"""
