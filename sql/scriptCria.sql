@@ -26,6 +26,7 @@ DROP TABLE urna;
 DROP TABLE secao;
 DROP TABLE zona;
 
+
 /**
 * Tabela zona
 * @nroZona, estadoZona     chave primaria
@@ -33,7 +34,6 @@ DROP TABLE zona;
 * @qtdEleitoresZ           quantidade de eleitores naquela zona 
 * @pk_zona                 restri��o da chave prim�ria
 */
-
 CREATE TABLE zona(
   nroZona NUMBER(5) NOT NULL,
   estadoZona CHAR(2) NOT NULL,
@@ -226,7 +226,7 @@ CREATE TABLE votoCandidato(
   estadoZona CHAR(2) NOT NULL,
   nroSecao NUMBER(3) NOT NULL,
   nroUrna NUMBER(10) NOT NULL,
-  idVotoC VARCHAR2(10) NOT NULL,
+  idVotoC NUMBER NOT NULL,
   CONSTRAINT pk_votoCandidato PRIMARY KEY (nroTitEleitor, nroZona, estadoZona, nroSecao, nroUrna, idVotoC),
   CONSTRAINT fk_votoCandidato_candidato FOREIGN KEY (nroTitEleitor) REFERENCES candidato,
   CONSTRAINT fk_votoCandidato_urna FOREIGN KEY (nroZona, estadoZona, nroSecao, nroUrna) REFERENCES urna (nroZona, estadoZona, nroSecao, nroUrna)
@@ -246,7 +246,7 @@ CREATE TABLE votoPartido(
   estadoZona CHAR(2) NOT NULL,
   nroSecao NUMBER(3) NOT NULL,
   nroUrna NUMBER(10) NOT NULL,
-  idVotoP VARCHAR2(10) NOT NULL,
+  idVotoP NUMBER NOT NULL,
   CONSTRAINT pk_votoPartido PRIMARY KEY (nroPartido, nroZona, estadoZona, nroSecao, nroUrna, idVotoP),
   CONSTRAINT fk_votoPartido_partido FOREIGN KEY (nroPartido) REFERENCES partido (nroPartido),
   CONSTRAINT fk_votoPartido_urna FOREIGN KEY (nroZona, estadoZona, nroSecao, nroUrna) REFERENCES urna (nroZona, estadoZona, nroSecao, nroUrna)

@@ -4,6 +4,7 @@ import wx
 import cx_Oracle
 from wx.lib.intctrl import IntCtrl
 from dbManager import dbManager, fk
+from sequenceCtrl import sequenceCtrl
 
 class tableInserter (wx.Panel):
     # Id do botão, pra rolar callback
@@ -53,11 +54,15 @@ class tableInserter (wx.Panel):
             observacao = obs.get (c[0])
             # Nada de ignorar, comportamento básico: "Label [ctrl]"
             if observacao != 'ignore':
-                txt = wx.StaticText (self, wx.ID_ANY, c[0])
+                txt = wx.StaticText (self, wx.ID_ANY, c[0] +
+                        (observacao == 'seq' and ' (seq)' or ''))
                 ## Cada tipo de dados pede um input diferente, digo bora ##
                 # Número: IntCtrl, com máximo e mínimo
                 if c[1] is cx_Oracle.NUMBER:
-                    ctrl = IntCtrl (self, min = 0, max = c[4] and 10 ** c[4] or None)
+                    if observacao == 'seq':
+                        ctrl = sequenceCtrl (self, tabela = tabela)
+                    else:
+                        ctrl = IntCtrl (self, min = 0, max = c[4] and 10 ** c[4] or None)
                 # Data: DatePickerCtrl, pq né
                 elif c[1] is cx_Oracle.DATETIME:
                     ctrl = wx.DatePickerCtrl (self)
@@ -111,15 +116,17 @@ class tableInserter (wx.Panel):
             # formata a entrada dependendo do tipo
             if type (c[1]) is wx.Choice:
                 valor = "'" + c[1].GetString (c[1].GetSelection ()) + "'"
-            elif type (c[1]) is IntCtrl:
+            elif type (c[1]) is IntCtrl or type (c[1]) is sequenceCtrl:
                 valor = str (c[1].GetValue ())
+            elif type (c[1]) is wx.DatePickerCtrl:
+                valor = "TO_DATE ('" + c[1].GetValue ().FormatISODate () + "', 'yyyy-mm-dd')"
             else:
                 valor = "'" + c[1].GetValue () + "'"
             valores.append (valor)
 
         try:
             self.db.insert (self.tabela, colunas, valores)
-            wx.MessageBox ("Tupla inserida!", "Inserção", wx.CENTRE + wx.ICON_ERROR + wx.OK)
+            wx.MessageBox ("Tupla inserida!", "Inserção", wx.CENTRE + wx.OK)
             app = self.GetParent ().GetParent ().GetParent ()
             app.SetStatusText ("Tupla inserida")
             app.algoMudou ()

@@ -55,7 +55,7 @@ class selectPanel (wx.Panel):
         page.refresh ()
 
     def refresh (self):
-        """Atualiza as informações das tabelas, se necessário"""
+        """Atualiza as informações das tabelas"""
         for pag in self.paginas:
             pag.refresh ()
 

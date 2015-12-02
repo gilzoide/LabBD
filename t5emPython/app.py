@@ -8,6 +8,7 @@ from queryLister import queryLister
 from selectPanel import selectPanel
 from insertPanel import insertPanel
 from relatorioPanel import relatorioPanel
+from selectsEspecificosPanel import selectsEspecificosPanel
 
 class myFrame (wx.Frame):
     """Nossa janela principal do LabBD"""
@@ -16,6 +17,7 @@ class myFrame (wx.Frame):
     ID_SELECT = 102
     ID_ROLLBACK = 103
     ID_RELATORIO = 104
+    ID_SELECTS_ESPECIFICOS = 105
 
     # Painel atual
     current = None
@@ -36,6 +38,7 @@ class myFrame (wx.Frame):
         self.Bind (wx.EVT_MENU, self.onInsert, id = self.ID_INSERT)
         self.Bind (wx.EVT_MENU, self.onRollback, id = self.ID_ROLLBACK)
         self.Bind (wx.EVT_MENU, self.onRelatorio, id = self.ID_RELATORIO)
+        self.Bind (wx.EVT_MENU, self.onSelectsEspecificos, id = self.ID_SELECTS_ESPECIFICOS)
 
         # Atalhos do teclado
         atalhos = wx.AcceleratorTable ([
@@ -59,7 +62,11 @@ class myFrame (wx.Frame):
             return
 
         self.insertPanel = insertPanel (self, self.ID_INSERT, size = self.panelSize)
+        self.insertPanel.Show (False)
         self.relatorioPanel = relatorioPanel (self, self.ID_RELATORIO, size = self.panelSize)
+        self.relatorioPanel.Show (False)
+        self.selectsEspecificosPanel = selectsEspecificosPanel (self, self.ID_SELECTS_ESPECIFICOS, size = self.panelSize)
+        self.selectsEspecificosPanel.Show (False)
         self.selectPanel = selectPanel (self, self.ID_SELECT, size = self.panelSize)
 
         self.current = self.selectPanel
@@ -77,6 +84,7 @@ class myFrame (wx.Frame):
         menuBar.Append (operacoes, '&Operações')
         operacoes.Append (self.ID_INSERT, '&Inserir', "Painel de inserção no BD")
         operacoes.Append (self.ID_SELECT, '&Mostrar tabelas', "Tabelas de dados")
+        operacoes.Append (self.ID_SELECTS_ESPECIFICOS, '&Pesquisas', "Saída de pesquisas específicas")
         operacoes.Append (self.ID_RELATORIO, '&Gerar relatórios', "Painel de geração de relatórios")
         # Menu de ajuda
         ajuda = wx.Menu ()
@@ -99,6 +107,9 @@ class myFrame (wx.Frame):
     def onSelect (self, event):
         self.changePanel (self.selectPanel)
 
+    def onSelectsEspecificos (self, event):
+        self.changePanel (self.selectsEspecificosPanel)
+
     def changePanel (self, newPanel):
         if self.current:
             self.current.Show (False)
@@ -113,6 +124,7 @@ class myFrame (wx.Frame):
     def algoMudou (self):
         """Algo mudou, então refaz os SELECTs"""
         self.selectPanel.refresh ()
+        self.selectsEspecificosPanel.refresh ()
 
     def onAbout (self, event):
         """Mostra informações sobre esse app"""

@@ -30,14 +30,18 @@ class dbManager ():
     # A conexão em si
     conn = None
     # As tabelas importantes para CRUD
-    TABELAS_IMPORTANTES = ('Zona', 'Secao', 'Urna', 'Pessoa', 'Partido', 'Funcionario',
-            'Candidato')
+    TABELAS_IMPORTANTES = ('Zona', 'Secao', 'Urna', 'Pessoa', 'Filia', 'Partido',
+            'Funcionario', 'Candidato', 'EhViceDe', 'VotoCandidato', 'VotoPartido')
 
     RESTRICOES = {
-                'Zona' : { 'QTDELEITORESZ' : 'ignore' },
+                'Zona' : {
+                    'NROZONA' : 'seq',
+                    'QTDELEITORESZ' : 'ignore',
+                },
                 'Secao' : {
                     'NROZONA' : 0,
                     'ESTADOZONA' : 0,
+                    'NROSECAO' : 'seq',
                     'QTDELEITORESS' : 'ignore',
                     'fks' : [fk ('Zona', ['NROZONA', 'ESTADOZONA'])],
                 },
@@ -45,6 +49,7 @@ class dbManager ():
                     'NROZONA' : 0,
                     'ESTADOZONA' : 0,
                     'NROSECAO' : 0,
+                    'NROURNA' : 'seq',
                     'TIPOURNA' : ('manual', 'eletronica'),
                     'fks' : [fk ('Secao', ['NROZONA', 'ESTADOZONA', 'NROSECAO'])]
                 },
@@ -52,14 +57,55 @@ class dbManager ():
                     'NROZONA' : 0,
                     'ESTADOZONA' : 0,
                     'NROSECAO' : 0,
-                    'fks' : [fk ('Secao', ['NROZONA', 'ESTADOZONA', 'NROSECAO'])]
+                    'TIPOPESSOA' : ('eleitor', 'candidato'),
+                    'fks' : [fk ('Secao', ['NROZONA', 'ESTADOZONA', 'NROSECAO'])],
+                },
+                'Filia' : {
+                    'NROTITELEITOR' : 0,
+                    'NROPARTIDO' : 1,
+                    'fks' : [fk ('Pessoa', ['NROTITELEITOR']), fk ('Partido', ['NROPARTIDO'])]
+                },
+                'Partido' : {
+                    'NROPARTIDO' : 'seq',
+                    'NROVOTOSP' : 'ignore',
                 },
                 'Candidato' : {
+                    'NROTITELEITOR' : 0,
                     'CARGOCANDIDATO' : ('presidente', 'vice-presidente', 'governador',
-                        'vice-governador', 'prefeito', 'vice-prefeito', 'vereador')
+                        'vice-governador', 'prefeito', 'vice-prefeito', 'vereador'),
+                    'fks' : [fk ('Pessoa', ['NROTITELEITOR'])]
                 },
                 'Funcionario' : {
-                    'CARGOFUNC' : ('mesario','presidente','secretario','suplente')
+                    'NROTITELEITOR' : 0,
+                    'CARGOFUNC' : ('mesario','presidente','secretario','suplente'),
+                    'NROZONA' : 1,
+                    'ESTADOZONA' : 1,
+                    'NROSECAO' : 1,
+                    'fks' : [fk ('Pessoa', ['NROTITELEITOR']), fk ('Secao', ['NROZONA', 'ESTADOZONA', 'NROSECAO'])]
+                },
+                'EhViceDe' : {
+                    'NROTITELEITORPRINCIPAL' : 0,
+                    'NROTITELEITORVICE' : 1,
+                    'fks' : [fk ('Candidato', ['NROTITELEITOR']), fk ('Candidato', ['NROTITELEITOR'])]
+                },
+                'VotoCandidato' : {
+                    'NROTITELEITOR' : 0,
+                    'NROZONA' : 1,
+                    'ESTADOZONA' : 1,
+                    'NROSECAO' : 1,
+                    'NROURNA' : 1,
+                    'IDVOTOC' : 'seq',
+                    'fks' : [fk ('Candidato', ['NROTITELEITOR']), fk ('Urna', ['NROZONA', 'ESTADOZONA', 'NROSECAO', 'NROURNA'])]
+                },
+                'VotoPartido' : {
+                    'NROPARTIDO' : 0,
+                    'NROZONA' : 1,
+                    'ESTADOZONA' : 1,
+                    'NROSECAO' : 1,
+                    'NROURNA' : 1,
+                    'IDVOTOP' : 'seq',
+                    'fks' : [fk ('Partido', ['NROPARTIDO']), fk ('Urna', ['NROZONA', 'ESTADOZONA', 'NROSECAO', 'NROURNA'])]
+
                 },
             }
 
