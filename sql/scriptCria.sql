@@ -107,7 +107,7 @@ CREATE TABLE pessoa(
   endPessoa VARCHAR2(60),
   dataNasc DATE,
   escolaridade VARCHAR2(30),
-  tipoPessoa VARCHAR2(20),
+  tipoPessoa VARCHAR2(20) DEFAULT NULL,
   nroZona NUMBER(5),
   estadoZona CHAR(2),
   nroSecao NUMBER(3),
