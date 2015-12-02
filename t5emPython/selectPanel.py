@@ -3,10 +3,13 @@
 import wx
 from queryLister import queryLister
 from dbManager import dbManager
+from updateFrame import updateFrame
 
 class selectPanel (wx.Panel):
-    # Id do botão de delete
+    # Id dos botões
     ID_DELETE = 100
+    ID_UPDATE = 101
+
     """Panel que mostra, em abas, todas as tabelas que queremos"""
     def __init__ (self, parent, id = wx.ID_ANY, position = wx.DefaultPosition, size = wx.DefaultSize):
         wx.Panel.__init__ (self, parent, id, position, size)
@@ -30,12 +33,37 @@ class selectPanel (wx.Panel):
         # botão de apagar
         deleteButton = wx.Button (self, self.ID_DELETE, label = "Apagar tupla")
         self.Bind (wx.EVT_BUTTON, self.onDelete, id = self.ID_DELETE)
-        sizer.Add (deleteButton, flag = wx.ALIGN_CENTER, proportion = 1)
+        # e botão de update
+        updateButton = wx.Button (self, self.ID_UPDATE, label = "Modificar tupla")
+        self.Bind (wx.EVT_BUTTON, self.onUpdate, id = self.ID_UPDATE)
+
+        # põe os dois botões na mesma linha
+        hbox = wx.BoxSizer (wx.HORIZONTAL)
+        hbox.Add (deleteButton, flag = wx.RIGHT, border = 50)
+        hbox.Add (updateButton, flag = wx.LEFT, border = 50)
+
+        sizer.Add (hbox, flag = wx.ALIGN_CENTER | wx.TOP, border = 10, proportion = 1)
 
         # e desenha as tabela
         self.refresh ()
 
+    def onUpdate (self, event):
+        """Tenta modificar tuplas selecionadas"""
+        # page é o queryLister atual
+        page = self.note.GetCurrentPage ()
+        prox = -1
+        while True:
+            prox = page.GetNextSelected (prox)
+            if prox == -1:
+                break
+            frame = updateFrame (self, tabela = self.note.GetPageText (self.note.GetSelection ()),
+                    colunas = page.colunas, tupla = page.valores[prox])
+            frame.Show ()
+        # Refaz a página
+        page.refresh ()
+
     def onDelete (self, event):
+        """Tenta apagar tuplas selecionadas"""
         # page é o queryLister atual
         page = self.note.GetCurrentPage ()
         prox = -1

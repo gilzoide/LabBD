@@ -8,16 +8,15 @@ os.environ['NLS_LANG'] = "PORTUGUESE_BRAZIL.AL32UTF8"
 
 class fk ():
     """Classe que descreve uma relação de parentesco entre chaves: Foreign Keys"""
-    def __init__ (self, tabelaPai, chaves):
+    def __init__ (self, tabelaPai, chaves, descricao):
         self.tabela = tabelaPai
         self.chaves = chaves
+        self.descricao = descricao
 
     def getKeys (self):
         db = dbManager.getDbManager ()
         _, valores = db.select (','.join (self.chaves), self.tabela)
-        def junta (tupla):
-            return ','.join (map (str, tupla))
-        return map (junta, valores)
+        return map (lambda tupla : ', '.join (map (str, tupla)), valores)
 
 class dbManager ():
     """Nosso gerenciador de transações com o banco de dados"""
@@ -43,7 +42,7 @@ class dbManager ():
                     'ESTADOZONA' : 0,
                     'NROSECAO' : 'seq',
                     'QTDELEITORESS' : 'ignore',
-                    'fks' : [fk ('Zona', ['NROZONA', 'ESTADOZONA'])],
+                    'fks' : [fk ('Zona', ['NROZONA', 'ESTADOZONA'], 'Zona correspondente')],
                 },
                 'Urna' : {
                     'NROZONA' : 0,
@@ -51,19 +50,19 @@ class dbManager ():
                     'NROSECAO' : 0,
                     'NROURNA' : 'seq',
                     'TIPOURNA' : ('manual', 'eletronica'),
-                    'fks' : [fk ('Secao', ['NROZONA', 'ESTADOZONA', 'NROSECAO'])]
+                    'fks' : [fk ('Secao', ['NROZONA', 'ESTADOZONA', 'NROSECAO'], 'Seção correspondente')]
                 },
                 'Pessoa' : {
                     'NROZONA' : 0,
                     'ESTADOZONA' : 0,
                     'NROSECAO' : 0,
-                    'TIPOPESSOA' : ('eleitor', 'candidato'),
-                    'fks' : [fk ('Secao', ['NROZONA', 'ESTADOZONA', 'NROSECAO'])],
+                    'TIPOPESSOA' : 'ignore',
+                    'fks' : [fk ('Secao', ['NROZONA', 'ESTADOZONA', 'NROSECAO'], 'Seção de votação')],
                 },
                 'Filia' : {
                     'NROTITELEITOR' : 0,
                     'NROPARTIDO' : 1,
-                    'fks' : [fk ('Pessoa', ['NROTITELEITOR']), fk ('Partido', ['NROPARTIDO'])]
+                    'fks' : [fk ('Pessoa', ['NROTITELEITOR'], 'Eleitor'), fk ('Partido', ['NROPARTIDO'], 'Partido filiado')]
                 },
                 'Partido' : {
                     'NROPARTIDO' : 'seq',
@@ -73,7 +72,7 @@ class dbManager ():
                     'NROTITELEITOR' : 0,
                     'CARGOCANDIDATO' : ('presidente', 'vice-presidente', 'governador',
                         'vice-governador', 'prefeito', 'vice-prefeito', 'vereador'),
-                    'fks' : [fk ('Pessoa', ['NROTITELEITOR'])]
+                    'fks' : [fk ('Pessoa', ['NROTITELEITOR'], 'Pessoa correspondente')]
                 },
                 'Funcionario' : {
                     'NROTITELEITOR' : 0,
@@ -81,12 +80,12 @@ class dbManager ():
                     'NROZONA' : 1,
                     'ESTADOZONA' : 1,
                     'NROSECAO' : 1,
-                    'fks' : [fk ('Pessoa', ['NROTITELEITOR']), fk ('Secao', ['NROZONA', 'ESTADOZONA', 'NROSECAO'])]
+                    'fks' : [fk ('Pessoa', ['NROTITELEITOR'], 'Pessoa correspondente'), fk ('Secao', ['NROZONA', 'ESTADOZONA', 'NROSECAO'], 'Seção de trabalho')]
                 },
                 'EhViceDe' : {
                     'NROTITELEITORPRINCIPAL' : 0,
                     'NROTITELEITORVICE' : 1,
-                    'fks' : [fk ('Candidato', ['NROTITELEITOR']), fk ('Candidato', ['NROTITELEITOR'])]
+                    'fks' : [fk ('Candidato', ['NROTITELEITOR'], 'Candidato principal'), fk ('Candidato', ['NROTITELEITOR'], 'Candidato vice')]
                 },
                 'VotoCandidato' : {
                     'NROTITELEITOR' : 0,
@@ -95,7 +94,7 @@ class dbManager ():
                     'NROSECAO' : 1,
                     'NROURNA' : 1,
                     'IDVOTOC' : 'seq',
-                    'fks' : [fk ('Candidato', ['NROTITELEITOR']), fk ('Urna', ['NROZONA', 'ESTADOZONA', 'NROSECAO', 'NROURNA'])]
+                    'fks' : [fk ('Candidato', ['NROTITELEITOR'], 'Candidato votado'), fk ('Urna', ['NROZONA', 'ESTADOZONA', 'NROSECAO', 'NROURNA'], 'Urna utilizada')]
                 },
                 'VotoPartido' : {
                     'NROPARTIDO' : 0,
@@ -104,7 +103,7 @@ class dbManager ():
                     'NROSECAO' : 1,
                     'NROURNA' : 1,
                     'IDVOTOP' : 'seq',
-                    'fks' : [fk ('Partido', ['NROPARTIDO']), fk ('Urna', ['NROZONA', 'ESTADOZONA', 'NROSECAO', 'NROURNA'])]
+                    'fks' : [fk ('Partido', ['NROPARTIDO'], 'Partido votado'), fk ('Urna', ['NROZONA', 'ESTADOZONA', 'NROSECAO', 'NROURNA'], 'Urna utilizada')]
 
                 },
             }
@@ -164,6 +163,13 @@ class dbManager ():
         except cx_Oracle.DatabaseError, exc:
             raise Exception (exc.args[0].message)
 
+    def update (self, tabela, atualizacoes, restricoes):
+        """Executa um 'UPDATE tabela SET atualizacoes WHERE restricoes'"""
+        try:
+            cur = self.conn.cursor ()
+        except cx_Oracle.DatabaseError, exc:
+            raise Exception (exc.args[0].message)
+
     def procedure (self, proc, args):
         """Executa uma procedure, pos relatório e pá"""
         cur = self.conn.cursor ()
@@ -186,9 +192,10 @@ class dbManager ():
         """Dá rollback na transação"""
         self.conn.rollback ()
 
-    def disconnect (self):
+    def disconnect (self, shouldCommit):
         """Disconecta do banco de dados (se tiver conectado, claro)"""
         if self.conn:
-            # commita as mudanças
-            self.conn.commit ()
+            # commita as mudanças, se pediu
+            if shouldCommit:
+                self.conn.commit ()
             self.conn.close ()

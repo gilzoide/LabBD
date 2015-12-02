@@ -37,7 +37,7 @@ class tableInserter (wx.Panel):
             self.fkChoices = []
             for i, fk in enumerate (self.fks):
                 # descobre quais são as possíveis fks, e mostra pa nóis
-                txt = wx.StaticText (self, wx.ID_ANY, 'FK' + str (i))
+                txt = wx.StaticText (self, wx.ID_ANY, 'FK ' + fk.descricao)
                 chaves = fk.getKeys ()
                 ctrl = wx.Choice (self, id = self.ID_FK + i, choices = chaves)
                 self.fkChoices.append (ctrl)
@@ -96,7 +96,7 @@ class tableInserter (wx.Panel):
 
     def atualizaFks (self, event):
         """Ao selecionar uma FK, completa os campos relacionados"""
-        campos = event.GetString ().split (',')
+        campos = event.GetString ().split (', ')
         for i, ctrl in enumerate (self.fkCtrlList[self.ID_FK - event.GetId ()]):
             valor = campos[i]
             if type (ctrl) is IntCtrl:

@@ -10,6 +10,7 @@ class queryLister (wx.ListCtrl):
         self.db = dbManager.getDbManager ()
 
     def setConsulta (self, what, fromWhat):
+        """Troca qual consulta que vai rolar"""
         self.what = what
         self.fromWhat = fromWhat
 
@@ -19,6 +20,7 @@ class queryLister (wx.ListCtrl):
         self.setValues (colunas, valores)
 
     def setValues (self, colunas, valores):
+        """Troca os valores atuais listados"""
         # limpa primeiro
         self.ClearAll ()
         # salva os valores pra tabela
@@ -36,4 +38,4 @@ class queryLister (wx.ListCtrl):
 
     def OnGetItemText (self, item, coluna):
         """Dita qual valor fica em cada célula"""
-        return self.valores[item][coluna]
+        return self.valores[item][coluna] or ''

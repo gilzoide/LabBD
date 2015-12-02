@@ -16,9 +16,10 @@ class relatorioPanel (wx.Panel):
         sizer = wx.BoxSizer (wx.VERTICAL)
         self.SetSizer (sizer)
 
+        fonteTitulo = wx.Font (24, wx.DEFAULT, wx.NORMAL, wx.NORMAL)
+
         ## Relatório 1 ##
         txt = wx.StaticText (self, wx.ID_ANY, "Relatório 1 - Candidatos")
-        fonteTitulo = wx.Font (24, wx.DEFAULT, wx.NORMAL, wx.NORMAL)
         txt.SetFont (fonteTitulo)
         sizer.Add (txt, flag = wx.ALIGN_CENTER)
         # primeiro campo

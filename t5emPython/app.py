@@ -18,6 +18,7 @@ class myFrame (wx.Frame):
     ID_ROLLBACK = 103
     ID_RELATORIO = 104
     ID_SELECTS_ESPECIFICOS = 105
+    ID_COMMIT = 106
 
     # Painel atual
     current = None
@@ -37,13 +38,15 @@ class myFrame (wx.Frame):
         self.Bind (wx.EVT_MENU, self.onSelect, id = self.ID_SELECT)
         self.Bind (wx.EVT_MENU, self.onInsert, id = self.ID_INSERT)
         self.Bind (wx.EVT_MENU, self.onRollback, id = self.ID_ROLLBACK)
+        self.Bind (wx.EVT_MENU, self.onCommit, id = self.ID_COMMIT)
         self.Bind (wx.EVT_MENU, self.onRelatorio, id = self.ID_RELATORIO)
         self.Bind (wx.EVT_MENU, self.onSelectsEspecificos, id = self.ID_SELECTS_ESPECIFICOS)
 
         # Atalhos do teclado
         atalhos = wx.AcceleratorTable ([
-                    (wx.ACCEL_CTRL, ord ('Z'), self.ID_ROLLBACK)
-                ])
+            (wx.ACCEL_CTRL, ord ('Z'), self.ID_ROLLBACK),
+            (wx.ACCEL_CTRL, ord ('S'), self.ID_COMMIT),
+        ])
         self.SetAcceleratorTable (atalhos)
 
         # abre a tela e troca o ícone
@@ -77,6 +80,7 @@ class myFrame (wx.Frame):
         # Menu de arquivo
         arquivo = wx.Menu ()
         menuBar.Append (arquivo, '&Arquivo')
+        arquivo.Append (self.ID_COMMIT, '&Aplicar modificações\tCtrl-S', 'Aplica modificações da transação corrente')
         arquivo.Append (self.ID_ROLLBACK, '&Descartar modificações\tCtrl-Z', 'Descarta transação corrente')
         arquivo.Append (wx.ID_EXIT, '&Sair', 'Sai do programa')
         # Menu de operações
@@ -100,25 +104,34 @@ class myFrame (wx.Frame):
             self.SetStatusText ("Rollback executado")
             self.algoMudou ()
 
+    def onCommit (self, event):
+        """Pergunta se usuário quer dar Commit"""
+        if wx.MessageBox ("Aplicar alterações no BD?", "Commit?", wx.YES_NO) == wx.YES:
+            self.db.commit ()
+            self.SetStatusText ("Commit executado")
+
     def onRelatorio (self, event):
         """Abre janela dos relatórios"""
         self.changePanel (self.relatorioPanel)
 
     def onSelect (self, event):
+        """Abre janela de SELECT * FROM tabela"""
         self.changePanel (self.selectPanel)
 
     def onSelectsEspecificos (self, event):
+        """Abre janela de Pesquisas do T2"""
         self.changePanel (self.selectsEspecificosPanel)
 
     def changePanel (self, newPanel):
-        if self.current:
-            self.current.Show (False)
+        """Função que troca o painel atual pelo `newPanel'"""
+        self.current.Show (False)
         # atualiza a janela atual
         self.current = newPanel
         # e mostra o trem
         self.current.Show (True)
 
     def onInsert (self, event):
+        """Abre janela de inserções"""
         self.changePanel (self.insertPanel)
 
     def algoMudou (self):
@@ -130,7 +143,7 @@ class myFrame (wx.Frame):
         """Mostra informações sobre esse app"""
         info = wx.AboutDialogInfo ()
         info.SetName ('T5 de LabBD')
-        info.SetVersion ('0.0.1')
+        info.SetVersion ('0.0.2')
         info.SetDescription ('Trabalho 5 de Laboratório de Bases de Dados')
         info.SetIcon (self.icon)
         info.AddDeveloper ('Gil Barbosa Reis - 8532248')
@@ -139,9 +152,11 @@ class myFrame (wx.Frame):
 
     def onQuit (self, event):
         """Sai do programa"""
-        self.db.disconnect ()
+        self.db.disconnect (True)
         self.Close ()
 
-app = wx.App (False)
-frame = myFrame ()
-app.MainLoop ()
+# cria app e roda
+if __name__ == '__main__':
+    app = wx.App (False)
+    frame = myFrame ()
+    app.MainLoop ()
