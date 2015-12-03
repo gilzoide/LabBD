@@ -56,6 +56,7 @@ class relatorioPanel (wx.Panel):
         esc = wx.Choice(self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize,
        ['Ensino médio', 'Ensino fundamental', 'Ensino superior'])
 
+        self.rel2  = esc
         # botão pra gerar 2
         button = wx.Button (self, self.ID_REL2, 'Gerar relatório')
         self.Bind (wx.EVT_BUTTON, self.onRel2, id = self.ID_REL2)
@@ -78,5 +79,5 @@ class relatorioPanel (wx.Panel):
     def onRel2 (self, event):
         """Botão de relatório 2"""
         db = dbManager.getDbManager ()
-        saida = db.procedure ('relatorios.gera_relatorio2', [esc.GetString(self,GetCurrentSelection(self))])
+        saida = db.procedure ('relatorios.gera_relatorio2', [self.rel2.GetString(self,self.rel2.GetCurrentSelection(self))])
         self.msgBox.SetValue (saida)
