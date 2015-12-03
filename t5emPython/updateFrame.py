@@ -36,7 +36,6 @@ class meuDatePicker (wx.DatePickerCtrl):
     def IsEmpty (self):
         return not self.Value.IsValid ()
 
-
 class updateFrame (wx.Frame):
     """Janela de Update de tuplas"""
     # Id dos botões
@@ -73,7 +72,6 @@ class updateFrame (wx.Frame):
                 # Enum (CHAR/VARCHAR2 com CHECK): Choice com as possibilidades
                 elif type (observacao) is tuple:
                     ctrl = wx.Choice (self, choices = observacao)
-                    ctrl.SetSelection (0)
                 # String (CHAR/VARCHAR2): TextCtrl
                 else:
                     ctrl = wx.TextCtrl (self)
@@ -85,6 +83,10 @@ class updateFrame (wx.Frame):
                 sizer.Add (hbox, flag = wx.EXPAND)
                 # salva na lista, pra podermos pegar depois
                 self.campos.append ((c, ctrl))
+
+        # Se não tem campos a atualizar, deixa quieto
+        if len (self.campos) == 0:
+            raise Exception ('Tabela não permite atualizações')
 
         cancelButton = wx.Button (self, self.ID_CANCELA, 'Cancelar')
         self.Bind (wx.EVT_BUTTON, self.onCancel, id = self.ID_CANCELA)
