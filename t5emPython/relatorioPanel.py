@@ -8,7 +8,7 @@ class relatorioPanel (wx.Panel):
     """Painel que possibilita a geração de relatórios"""
     # Ids
     ID_REL1 = 100
-
+    ID_REL2 = 101
     def __init__ (self, parent, id = wx.ID_ANY, position = wx.DefaultPosition, size = wx.DefaultSize):
         wx.Panel.__init__ (self, parent, id, position, size)
 
@@ -40,17 +40,26 @@ class relatorioPanel (wx.Panel):
         sizer.Add (hbox, flag = wx.EXPAND)
 
         self.rel1final = ctrl
-        # botão pra gerar
+
+        # botão pra gerar1 
         button = wx.Button (self, self.ID_REL1, 'Gerar relatório')
         self.Bind (wx.EVT_BUTTON, self.onRel1, id = self.ID_REL1)
         sizer.Add (button, flag = wx.CENTER)
 
         sizer.AddSpacer (50)
         ## Relatório 2 ##
-        txt = wx.StaticText (self, wx.ID_ANY, "Relatório 2 - ???")
+        txt = wx.StaticText (self, wx.ID_ANY, "Relatório 2 - Pessoas vs Escolaridade")
         txt.SetFont (fonteTitulo)
         sizer.Add (txt, flag = wx.ALIGN_CENTER)
 
+        # campo 1 relatorio 2
+        esc = wx.Choice(self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize,
+       ['Ensino médio', 'Ensino fundamental', 'Ensino superior'])
+
+        # botão pra gerar 2
+        button = wx.Button (self, self.ID_REL2, 'Gerar relatório')
+        self.Bind (wx.EVT_BUTTON, self.onRel2, id = self.ID_REL2)
+        sizer.Add (button, flag = wx.CENTER)
         # e a saída
         font = wx.Font (10, wx.FONTFAMILY_TELETYPE, wx.FONTSTYLE_NORMAL,
                 wx.FONTWEIGHT_NORMAL, False, "DejaVu Sans Mono")
@@ -64,4 +73,10 @@ class relatorioPanel (wx.Panel):
         db = dbManager.getDbManager ()
         saida = db.procedure ('relatorios.gera_relatorio', [self.rel1inicial.GetValue (),
                 self.rel1final.GetValue ()])
+        self.msgBox.SetValue (saida)
+
+    def onRel2 (self, event):
+        """Botão de relatório 2"""
+        db = dbManager.getDbManager ()
+        saida = db.procedure ('relatorios.gera_relatorio2', [esc.GetString(self,GetCurrentSelection(self))])
         self.msgBox.SetValue (saida)
