@@ -9,15 +9,18 @@ class queryLister (wx.ListCtrl):
     def __init__ (self, parent, id = wx.ID_ANY, position = wx.DefaultPosition, size = wx.DefaultSize):
         wx.ListCtrl.__init__ (self, parent, id, position, size, wx.LC_REPORT | wx.LC_VIRTUAL)
         self.db = dbManager.getDbManager ()
+        self.ultimoClique = None
 
     def setConsulta (self, what, fromWhat):
         """Troca qual consulta que vai rolar"""
         self.what = what
         self.fromWhat = fromWhat
+        self.orderBy = None
 
     def refresh (self):
         """Refaz a consulta, repondo os valores na tabela"""
-        colunas, valores = self.db.select (self.what, self.fromWhat)
+        fromWhat = self.fromWhat + (self.orderBy and ' ORDER BY ' + self.orderBy or '')
+        colunas, valores = self.db.select (self.what, fromWhat)
         self.setValues (colunas, valores)
 
     def setValues (self, colunas, valores):
@@ -36,6 +39,18 @@ class queryLister (wx.ListCtrl):
             self.InsertColumn (i, c[0], width = columnWidth)
 
         self.SetItemCount (height)
+
+    def OnColumnClick (self, event):
+        """Se clicou numa coluna, dá um Sort pliz ^^ """
+        clique = event.m_col
+        if self.ultimoClique == clique:
+            self.asc = not self.asc
+        else:
+            self.ultimoClique = clique
+            self.asc = True
+
+        self.orderBy = self.colunas[clique][0] + (self.asc and ' ASC' or ' DESC')
+        self.refresh ()
 
     def OnGetItemText (self, item, coluna):
         """Dita qual valor fica em cada célula"""

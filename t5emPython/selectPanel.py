@@ -9,6 +9,7 @@ class selectPanel (wx.Panel):
     # Id dos botões
     ID_DELETE = 100
     ID_UPDATE = 101
+    ID_TABELA = 110
 
     """Panel que mostra, em abas, todas as tabelas que queremos"""
     def __init__ (self, parent, id = wx.ID_ANY, position = wx.DefaultPosition, size = wx.DefaultSize):
@@ -24,8 +25,9 @@ class selectPanel (wx.Panel):
         # cria o Notebook, cada aba um SELECT
         self.note = wx.Notebook (self, style = wx.NB_TOP)
         sizer.Add (self.note, proportion = 10, flag = wx.EXPAND)
-        for tabela in dbManager.TABELAS_IMPORTANTES:
-            pagina = queryLister (self.note)
+        for i, tabela in enumerate (dbManager.TABELAS_IMPORTANTES):
+            pagina = queryLister (self.note, self.ID_TABELA + i, size = size - wx.Size (10, 0))
+            self.Bind (wx.EVT_LIST_COL_CLICK, pagina.OnColumnClick, id = self.ID_TABELA + i)
             pagina.setConsulta ('*', tabela)
             self.paginas.append (pagina)
             self.note.AddPage (pagina, tabela)
