@@ -93,6 +93,7 @@ END desvio_padrao;
 /* Gera um relatório contendo informações sobre candidatos com idade entre idadeInicial e idadeFinal anos, e a soma e média de votos por candidato */
 CREATE OR REPLACE PACKAGE relatorios IS
   PROCEDURE gera_relatorio (idadeInicial IN NUMBER, idadeFinal IN NUMBER);
+  PROCEDURE gera_relatorio2 (escolaridade2 IN VARCHAR2);
 END relatorios;
 /
 
@@ -129,6 +130,37 @@ CREATE OR REPLACE PACKAGE BODY relatorios IS
     CLOSE cursor_candidato;
     dbms_output.put_line('______________________________________________________________________________________________________________');
     dbms_output.put_line('Numero total de votos: ' || RPAD (numero_votos, 16) || ' Média de votos: ' || RTRIM (RPAD (ROUND(media_votos,10), 13), '0') || ' Desvio Padrão: ' || RTRIM (RPAD (desvio_padrao(idadeInicial, idadeFinal), 25), '0'));
+    dbms_output.put_line('--------------------------------------------------------------------------------------------------------------');
+    dbms_output.put_line(' ');
+    dbms_output.put_line(' ');
+  END;
+
+  PROCEDURE gera_relatorio2
+    (escolaridade2 IN VARCHAR2)
+  IS
+    CURSOR cursor_pessoa IS
+      SELECT pessoa.nomePessoa, pessoa.endPessoa, pessoa.dataNasc
+        FROM pessoa WHERE pessoa.escolaridade = escolaridade2;
+    variavel_cursor cursor_pessoa%Rowtype;
+    contador_tipo NUMBER;
+    contador_total NUMBER;
+  BEGIN
+      SELECT COUNT(pessoa.nroTitEleitor) INTO contador_tipo FROM pessoa WHERE pessoa.escolaridade = escolaridade2;
+        
+    SELECT COUNT(pessoa.nroTitEleitor) INTO contador_total 
+        FROM pessoa;
+    dbms_output.put_line('Lista de eleitores com escolaridade : ' || escolaridade2);
+    dbms_output.put_line( RPAD ('Nome Pessoa', 40) || RPAD ('Endereço', 25) || 'Data Nascimento');
+    dbms_output.put_line('______________________________________________________________________________________________________________');       
+    OPEN cursor_pessoa;
+      LOOP
+      FETCH cursor_pessoa INTO variavel_cursor;
+      EXIT WHEN cursor_pessoa%NotFound;
+      dbms_output.put_line(RPAD (variavel_cursor.nomePessoa, 40)  || RPAD (variavel_cursor.endPessoa, 25) || variavel_cursor.dataNasc);
+    END LOOP;
+    CLOSE cursor_pessoa;
+    dbms_output.put_line('______________________________________________________________________________________________________________');
+    dbms_output.put_line('Numero total de pessoas: ' || RPAD (contador_total, 16) || ' Numero de pessoas com ' || escolaridade2 ||' : ' || RTRIM (RPAD (ROUND(contador_tipo,10), 13), '0'));
     dbms_output.put_line('--------------------------------------------------------------------------------------------------------------');
     dbms_output.put_line(' ');
     dbms_output.put_line(' ');
@@ -184,45 +216,6 @@ BEGIN
   relatorios.gera_relatorio(10, 30);
   relatorios.gera_relatorio(40, 60);
   relatorios.gera_relatorio(60, 100);
-END;
-/
-
-
-CREATE OR REPLACE PROCEDURE gera_relatorio2
-  (escolaridade2 IN VARCHAR2)
-IS
-  CURSOR cursor_pessoa IS
-    SELECT pessoa.nomePessoa, pessoa.endPessoa, pessoa.dataNasc
-      FROM pessoa WHERE pessoa.escolaridade = escolaridade2;
-  variavel_cursor cursor_pessoa%Rowtype;
-  contador_tipo NUMBER;
-  contador_total NUMBER;
-BEGIN
-    SELECT COUNT(pessoa.nroTitEleitor) INTO contador_tipo FROM pessoa WHERE pessoa.escolaridade = escolaridade2;
-      
-  SELECT COUNT(pessoa.nroTitEleitor) INTO contador_total 
-      FROM pessoa;
-  dbms_output.put_line('Lista de eleitores com escolaridade : ' || escolaridade2);
-  dbms_output.put_line( RPAD ('Nome Pessoa', 40) || RPAD ('Endereço', 25) || 'Data Nascimento');
-  dbms_output.put_line('______________________________________________________________________________________________________________');       
-  OPEN cursor_pessoa;
-    LOOP
-    FETCH cursor_pessoa INTO variavel_cursor;
-    EXIT WHEN cursor_pessoa%NotFound;
-    dbms_output.put_line(RPAD (variavel_cursor.nomePessoa, 40)  || RPAD (variavel_cursor.endPessoa, 25) || variavel_cursor.dataNasc);
-  END LOOP;
-  CLOSE cursor_pessoa;
-  dbms_output.put_line('______________________________________________________________________________________________________________');
-  dbms_output.put_line('Numero total de pessoas: ' || RPAD (contador_total, 16) || ' Numero de pessoas com ' || escolaridade2 ||' : ' || RTRIM (RPAD (ROUND(contador_tipo,10), 13), '0'));
-  dbms_output.put_line('--------------------------------------------------------------------------------------------------------------');
-  dbms_output.put_line(' ');
-  dbms_output.put_line(' ');
-END gera_relatorio2;
-/
-
-set serveroutput on;
-DECLARE
-BEGIN
-gera_relatorio2('ensino medio');
+  relatorios.gera_relatorio2('ensino medio');
 END;
 /
