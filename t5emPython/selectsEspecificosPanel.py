@@ -7,7 +7,7 @@ class selectsEspecificosPanel (wx.Panel):
     """Painel dos SELECTs específicos, do T2"""
 
     pesquisas = [
-        ('P.nomePessoa AS "Nome", C.nomeFantasia AS "Nome Fantasia"',
+        ('P.nomePessoa, C.nomeFantasia',
 """Candidato C
 JOIN Pessoa P ON C.nroTitEleitor = P.nroTitEleitor
 WHERE NOT EXISTS (
@@ -22,14 +22,14 @@ WHERE V.nroTitEleitor = C.nroTitEleitor
 )
 )""",
         'Nomes e nomes fantasia dos candidatos que tiveram votos registrados em todas as zonas eleitorais'),
-        ('Pessoa.nomePessoa AS "Nome"',
+        ('Pessoa.nomePessoa',
 """Pessoa
 JOIN filia ON pessoa.nroTitEleitor = filia.nroTitEleitor
 JOIN partido ON filia.nroPartido = partido.nroPartido
 WHERE partido.siglaPartido IN ('PMG','PDB') AND pessoa.nroZona IN(1,2)
 """,
         'Nome das pessoas que tenham filiação no partido PDB ou PMG e zona eleitoral seja igual a 1 ou 2'),
-        ('pessoa.escolaridade AS "Escolaridade",funcionario.cargoFunc AS "Cargo", COUNT(pessoa.nroTitEleitor) AS "Numero de Pessoas"',
+        ('pessoa.escolaridade,funcionario.cargoFunc, COUNT(pessoa.nroTitEleitor) AS "Numero de Pessoas"',
 """pessoa
 JOIN funcionario ON pessoa.nroTitEleitor = funcionario.nroTitEleitor
 JOIN secao ON secao.nroSecao = funcionario.nroSecao
@@ -37,7 +37,7 @@ WHERE secao.localSecao = 'Sala 1'
 GROUP BY ROLLUP(pessoa.escolaridade, funcionario.cargoFunc)
 """,
         "Listagem por escolaridade da quantidade de pessoas em cada cargo que tem como localSecao = 'Sala 1'"),
-        ('P.nomePessoa AS "Nome", C.nomeFantasia AS "Nome Fantasia"',
+        ('P.nomePessoa, C.nomeFantasia',
 """Candidato C
 JOIN Pessoa P ON C.nroTitEleitor = P.nroTitEleitor
 WHERE P.estadoZona = 'SP'
@@ -47,7 +47,7 @@ FROM EhViceDe E
 WHERE E.nroTitEleitorPrincipal = C.nroTitEleitor
 )""",
         "Nomes e nomes fantasia dos candidatos do estado de São Paulo que possuem vice"),
-        ('P.siglaPartido AS "Partido", SUM (C.nroVotos) AS "Número de Votos"',
+        ('P.siglaPartido, SUM (C.nroVotos) AS "Número de Votos"',
 """Candidato C
 JOIN VotoCandidato V ON C.nroTitEleitor = V.nroTitEleitor
 JOIN Filia F ON C.nroTitEleitor = F.nroTitEleitor

@@ -32,83 +32,119 @@ class dbManager ():
     TABELAS_IMPORTANTES = ('Zona', 'Secao', 'Urna', 'Pessoa', 'Filia', 'Partido',
             'Funcionario', 'Candidato', 'EhViceDe', 'VotoCandidato', 'VotoPartido')
 
-    RESTRICOES = {
-                'Zona' : {
-                    'NROZONA' : 'seq',
-                    'ESTADOZONA' : 'pk',
-                    'QTDELEITORESZ' : 'ignore',
-                },
-                'Secao' : {
-                    'NROZONA' : 0,
-                    'ESTADOZONA' : 0,
-                    'NROSECAO' : 'seq',
-                    'QTDELEITORESS' : 'ignore',
-                    'fks' : [fk ('Zona', ['NROZONA', 'ESTADOZONA'], 'Zona correspondente')],
-                },
-                'Urna' : {
-                    'NROZONA' : 0,
-                    'ESTADOZONA' : 0,
-                    'NROSECAO' : 0,
-                    'NROURNA' : 'seq',
-                    'TIPOURNA' : ('manual', 'eletronica'),
-                    'fks' : [fk ('Secao', ['NROZONA', 'ESTADOZONA', 'NROSECAO'], 'Seção correspondente')]
-                },
-                'Pessoa' : {
-                    'NROTITELEITOR' : 'pk',
-                    'NROZONA' : 0,
-                    'ESTADOZONA' : 0,
-                    'NROSECAO' : 0,
-                    'TIPOPESSOA' : 'ignore',
-                    'fks' : [fk ('Secao', ['NROZONA', 'ESTADOZONA', 'NROSECAO'], 'Seção de votação')],
-                },
-                'Filia' : {
-                    'NROTITELEITOR' : 0,
-                    'NROPARTIDO' : 1,
-                    'fks' : [fk ('Pessoa', ['NROTITELEITOR'], 'Eleitor'), fk ('Partido', ['NROPARTIDO'], 'Partido filiado')]
-                },
-                'Partido' : {
-                    'NROPARTIDO' : 'seq',
-                    'NROVOTOSP' : 'ignore',
-                },
-                'Candidato' : {
-                    'NROTITELEITOR' : 0,
-                    'CARGOCANDIDATO' : ('presidente', 'vice-presidente', 'governador',
-                        'vice-governador', 'prefeito', 'vice-prefeito', 'vereador'),
-                    'fks' : [fk ('Pessoa', ['NROTITELEITOR'], 'Pessoa correspondente')]
-                },
-                'Funcionario' : {
-                    'NROTITELEITOR' : 0,
-                    'CARGOFUNC' : ('mesario','presidente','secretario','suplente'),
-                    'NROZONA' : 1,
-                    'ESTADOZONA' : 1,
-                    'NROSECAO' : 1,
-                    'fks' : [fk ('Pessoa', ['NROTITELEITOR'], 'Pessoa correspondente'), fk ('Secao', ['NROZONA', 'ESTADOZONA', 'NROSECAO'], 'Seção de trabalho')]
-                },
-                'EhViceDe' : {
-                    'NROTITELEITORPRINCIPAL' : 0,
-                    'NROTITELEITORVICE' : 1,
-                    'fks' : [fk ('Candidato', ['NROTITELEITOR'], 'Candidato principal'), fk ('Candidato', ['NROTITELEITOR'], 'Candidato vice')]
-                },
-                'VotoCandidato' : {
-                    'NROTITELEITOR' : 0,
-                    'NROZONA' : 1,
-                    'ESTADOZONA' : 1,
-                    'NROSECAO' : 1,
-                    'NROURNA' : 1,
-                    'IDVOTOC' : 'seq',
-                    'fks' : [fk ('Candidato', ['NROTITELEITOR'], 'Candidato votado'), fk ('Urna', ['NROZONA', 'ESTADOZONA', 'NROSECAO', 'NROURNA'], 'Urna utilizada')]
-                },
-                'VotoPartido' : {
-                    'NROPARTIDO' : 0,
-                    'NROZONA' : 1,
-                    'ESTADOZONA' : 1,
-                    'NROSECAO' : 1,
-                    'NROURNA' : 1,
-                    'IDVOTOP' : 'seq',
-                    'fks' : [fk ('Partido', ['NROPARTIDO'], 'Partido votado'), fk ('Urna', ['NROZONA', 'ESTADOZONA', 'NROSECAO', 'NROURNA'], 'Urna utilizada')]
+    COLUNAS_BONITAS = {
+        'NROZONA' : 'Número da Zona',
+        'ESTADOZONA' : 'Estado da Zona',
+        'ENDZONA' : 'Endereço da Zona',
+        'QTDELEITORESZ' : 'Quantidade de Eleitores',
+        'NROSECAO' : 'Número da Seção',
+        'LOCALSECAO' : 'Local da Seção',
+        'QTDELEITORESS' : 'Quantidade de Eleitores',
+        'NROURNA' : 'Número da Urna',
+        'MODELO' : 'Modelo',
+        'TIPOURNA' : 'Tipo',
+        'NOMEPESSOA' : 'Nome',
+        'ENDPESSOA' : 'Endereço',
+        'DATANASC' : 'Data de nascimento',
+        'ESCOLARIDADE' : 'Escolaridade',
+        'TIPOPESSOA' : 'Tipo',
+        'NROTITELEITOR' : 'Título de eleitor',
+        'NROPARTIDO' : 'Número do Partido',
+        'NOMEPARTIDO' : 'Nome',
+        'SIGLAPARTIDO' : 'Sigla',
+        'NROVOTOSP' : 'Número de votos',
+        'NOMEFANTASIA' : 'Nome fantasia',
+        'NROCANDIDATO' : 'Número do Candidato',
+        'CARGOCANDIDATO' : 'Cargo',
+        'NROVOTOS' : 'Número de votos',
+        'NROTITELEITORPRINCIPAL' : 'Candidato Principal',
+        'NROTITELEITORVICE' : 'Candidato Vice',
+        'CARGOFUNC' : 'Cargo',
+        'IDVOTOC' : 'Id',
+        'IDVOTOP' : 'Id',
+    }
 
-                },
-            }
+    @staticmethod
+    def getColunaBonita (coluna):
+        """Pega o nome bonito da coluna `coluna', baseado no dicionário acima"""
+        return dbManager.COLUNAS_BONITAS.get (coluna) or coluna
+
+    RESTRICOES = {
+        'Zona' : {
+            'NROZONA' : 'seq',
+            'ESTADOZONA' : 'pk',
+            'QTDELEITORESZ' : 'ignore',
+        },
+        'Secao' : {
+            'NROZONA' : 0,
+            'ESTADOZONA' : 0,
+            'NROSECAO' : 'seq',
+            'QTDELEITORESS' : 'ignore',
+            'fks' : [fk ('Zona', ['NROZONA', 'ESTADOZONA'], 'Zona correspondente')],
+        },
+        'Urna' : {
+            'NROZONA' : 0,
+            'ESTADOZONA' : 0,
+            'NROSECAO' : 0,
+            'NROURNA' : 'seq',
+            'TIPOURNA' : ('manual', 'eletronica'),
+            'fks' : [fk ('Secao', ['NROZONA', 'ESTADOZONA', 'NROSECAO'], 'Seção correspondente')]
+        },
+        'Pessoa' : {
+            'NROTITELEITOR' : 'pk',
+            'NROZONA' : 0,
+            'ESTADOZONA' : 0,
+            'NROSECAO' : 0,
+            'TIPOPESSOA' : 'ignore',
+            'fks' : [fk ('Secao', ['NROZONA', 'ESTADOZONA', 'NROSECAO'], 'Seção de votação')],
+        },
+        'Filia' : {
+            'NROTITELEITOR' : 0,
+            'NROPARTIDO' : 1,
+            'fks' : [fk ('Pessoa', ['NROTITELEITOR'], 'Eleitor'), fk ('Partido', ['NROPARTIDO'], 'Partido filiado')]
+        },
+        'Partido' : {
+            'NROPARTIDO' : 'seq',
+            'NROVOTOSP' : 'ignore',
+        },
+        'Candidato' : {
+            'NROTITELEITOR' : 0,
+            'CARGOCANDIDATO' : ('presidente', 'vice-presidente', 'governador',
+                'vice-governador', 'prefeito', 'vice-prefeito', 'vereador'),
+            'fks' : [fk ('Pessoa', ['NROTITELEITOR'], 'Pessoa correspondente')]
+        },
+        'Funcionario' : {
+            'NROTITELEITOR' : 0,
+            'CARGOFUNC' : ('mesario','presidente','secretario','suplente'),
+            'NROZONA' : 1,
+            'ESTADOZONA' : 1,
+            'NROSECAO' : 1,
+            'fks' : [fk ('Pessoa', ['NROTITELEITOR'], 'Pessoa correspondente'), fk ('Secao', ['NROZONA', 'ESTADOZONA', 'NROSECAO'], 'Seção de trabalho')]
+        },
+        'EhViceDe' : {
+            'NROTITELEITORPRINCIPAL' : 0,
+            'NROTITELEITORVICE' : 1,
+            'fks' : [fk ('Candidato', ['NROTITELEITOR'], 'Candidato principal'), fk ('Candidato', ['NROTITELEITOR'], 'Candidato vice')]
+        },
+        'VotoCandidato' : {
+            'NROTITELEITOR' : 0,
+            'NROZONA' : 1,
+            'ESTADOZONA' : 1,
+            'NROSECAO' : 1,
+            'NROURNA' : 1,
+            'IDVOTOC' : 'seq',
+            'fks' : [fk ('Candidato', ['NROTITELEITOR'], 'Candidato votado'), fk ('Urna', ['NROZONA', 'ESTADOZONA', 'NROSECAO', 'NROURNA'], 'Urna utilizada')]
+        },
+        'VotoPartido' : {
+            'NROPARTIDO' : 0,
+            'NROZONA' : 1,
+            'ESTADOZONA' : 1,
+            'NROSECAO' : 1,
+            'NROURNA' : 1,
+            'IDVOTOP' : 'seq',
+            'fks' : [fk ('Partido', ['NROPARTIDO'], 'Partido votado'), fk ('Urna', ['NROZONA', 'ESTADOZONA', 'NROSECAO', 'NROURNA'], 'Urna utilizada')]
+        },
+    }
 
     # A instância única, Singleton
     instance = None

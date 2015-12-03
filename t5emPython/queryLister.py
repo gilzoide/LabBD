@@ -36,7 +36,7 @@ class queryLister (wx.ListCtrl):
 
         # insere as colunas
         for i, c in enumerate (colunas):
-            self.InsertColumn (i, c[0], width = columnWidth)
+            self.InsertColumn (i, dbManager.getColunaBonita (c[0]), width = columnWidth)
 
         self.SetItemCount (height)
 

@@ -19,7 +19,7 @@ class mostraTupla (wx.ListCtrl):
         columnWidth = self.GetSize ().GetWidth () / width
         # insere as colunas
         for i, c in enumerate (colunas):
-            self.InsertColumn (i, c[0], width = columnWidth)
+            self.InsertColumn (i, dbManager.getColunaBonita (c[0]), width = columnWidth)
 
         self.SetItemCount (1)
 
@@ -62,7 +62,7 @@ class updateFrame (wx.Frame):
             observacao = obs.get (c[0])
             # Nada de ignorar, comportamento básico: "Label [ctrl]"
             if not (observacao in ('ignore', 'seq', 'pk') or type (observacao) is int):
-                txt = wx.StaticText (self, wx.ID_ANY, 'Novo ' + c[0])
+                txt = wx.StaticText (self, wx.ID_ANY, 'Novo ' + dbManager.getColunaBonita (c[0]))
                 ## Cada tipo de dados pede um input diferente, digo bora ##
                 # Número: IntCtrl, com máximo e mínimo
                 if c[1] is cx_Oracle.NUMBER:

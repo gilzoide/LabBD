@@ -54,7 +54,7 @@ class tableInserter (wx.Panel):
             observacao = obs.get (c[0])
             # Nada de ignorar, comportamento básico: "Label [ctrl]"
             if observacao != 'ignore':
-                txt = wx.StaticText (self, wx.ID_ANY, c[0] +
+                txt = wx.StaticText (self, wx.ID_ANY, dbManager.getColunaBonita (c[0]) +
                         (observacao == 'seq' and ' (seq)' or ''))
                 ## Cada tipo de dados pede um input diferente, digo bora ##
                 # Número: IntCtrl, com máximo e mínimo
