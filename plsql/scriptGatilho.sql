@@ -32,8 +32,41 @@ CREATE OR REPLACE TRIGGER atualiza_voto_candidato
 END;
 /
 
+/* Trigger que atualiza o atributo tipoPessoa da tabela pessoa em relação a tabela candidato*/
+CREATE OR REPLACE TRIGGER atualiza_tipo_pessoa
+  AFTER INSERT OR DELETE ON candidato
+  REFERENCING OLD AS antigo NEW AS novo
+  FOR EACH ROW
+  BEGIN
+  IF inserting
+  THEN UPDATE pessoa SET tipoPessoa = 'Candidato'
+    WHERE :novo.nroTitEleitor = pessoa.nroTitEleitor;
+  ELSIF deleting
+  THEN UPDATE pessoa SET tipoPessoa = NULL
+    WHERE :antigo.nroTitEleitor = pessoa.nroTitEleitor;
+  END IF;
+END;
+/
+
+/* Trigger que atualiza o atributo tipoPessoa da tabela pessoa em relação a tabela funcionario*/
+CREATE OR REPLACE TRIGGER atualiza_tipo_pessoa2
+  AFTER INSERT OR DELETE ON funcionario
+  REFERENCING OLD AS antigo NEW AS novo
+  FOR EACH ROW
+  BEGIN
+  IF inserting
+  THEN UPDATE pessoa SET tipoPessoa = 'Funcionario'
+    WHERE :novo.nroTitEleitor = pessoa.nroTitEleitor;
+  ELSIF deleting
+  THEN UPDATE pessoa SET tipoPessoa = NULL
+    WHERE :antigo.nroTitEleitor = pessoa.nroTitEleitor;
+  END IF;
+END;
+/
+
+
 /* Trigger que atualiza o atributo nroVotosP da tabela VotoPartido */
-CREATE OR REPLACE TRIGGER atualiza_voto_partido
+CREATE OR REPLACE TRIGGER atualiza_tipo_partido
   AFTER INSERT OR DELETE ON votoPartido
   REFERENCING OLD AS antigo NEW AS novo
   FOR EACH ROW
@@ -47,6 +80,7 @@ CREATE OR REPLACE TRIGGER atualiza_voto_partido
   END IF;
 END;
 /
+
 
 /* Trigger que atualiza o atributo qtdEleitoresZ da table Zona quando modificando uma Pessoa */
 CREATE OR REPLACE TRIGGER atualiza_pessoa_zona
