@@ -35,6 +35,7 @@ class dbManager ():
     RESTRICOES = {
                 'Zona' : {
                     'NROZONA' : 'seq',
+                    'ESTADOZONA' : 'pk',
                     'QTDELEITORESZ' : 'ignore',
                 },
                 'Secao' : {
@@ -53,6 +54,7 @@ class dbManager ():
                     'fks' : [fk ('Secao', ['NROZONA', 'ESTADOZONA', 'NROSECAO'], 'Seção correspondente')]
                 },
                 'Pessoa' : {
+                    'NROTITELEITOR' : 'pk',
                     'NROZONA' : 0,
                     'ESTADOZONA' : 0,
                     'NROSECAO' : 0,
@@ -163,12 +165,36 @@ class dbManager ():
         except cx_Oracle.DatabaseError, exc:
             raise Exception (exc.args[0].message)
 
-    def update (self, tabela, atualizacoes, restricoes):
+    def update (self, tabela, colunasAtualiza, valoresAtualiza, colunasRestricao, valoresRestricao):
         """Executa um 'UPDATE tabela SET atualizacoes WHERE restricoes'"""
-        try:
-            cur = self.conn.cursor ()
-        except cx_Oracle.DatabaseError, exc:
-            raise Exception (exc.args[0].message)
+        if len (colunasAtualiza):
+            try:
+                cur = self.conn.cursor ()
+
+                # conjunto de valores a serem atualizados
+                atualizacoes = []
+                for i, c in enumerate (colunasAtualiza):
+                    atualizacoes.append (c[0] + ' = ' + valoresAtualiza[i])
+
+                # conjunto de condições 'ATTR_NAME = valor'
+                condicoes = []
+                for i, c in enumerate (colunasRestricao):
+                    if not valoresRestricao[i] is None:
+                        # se número, só vira string
+                        if c[1] is cx_Oracle.NUMBER:
+                            valor = str (valoresRestricao[i])
+                        elif c[1] is cx_Oracle.DATETIME:
+                            valor = "TO_DATE ('" + valoresRestricao[i].date ().isoformat () + "', 'yyyy-mm-dd')"
+                        # strings: põe aspas
+                        else:
+                            valor = "'" + valoresRestricao[i] + "'"
+                        condicoes.append (c[0] + ' = ' + valor)
+
+                #print 'atualizações:', atualizacoes, 'condições:', condicoes
+                string = 'UPDATE ' + tabela + ' SET ' + (','.join (atualizacoes)) + ' WHERE ' + (' AND '.join (condicoes))
+                cur.execute (string)
+            except cx_Oracle.DatabaseError, exc:
+                raise Exception (exc.args[0].message)
 
     def procedure (self, proc, args):
         """Executa uma procedure, pos relatório e pá"""

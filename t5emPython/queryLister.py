@@ -1,12 +1,13 @@
 # coding: utf-8
 
 import wx
+import datetime
 from dbManager import dbManager
 
 class queryLister (wx.ListCtrl):
     """Tabela que lista um SELECT"""
     def __init__ (self, parent, id = wx.ID_ANY, position = wx.DefaultPosition, size = wx.DefaultSize):
-        wx.ListCtrl.__init__ (self, parent, id, position, size, wx.LC_REPORT + wx.LC_VIRTUAL)
+        wx.ListCtrl.__init__ (self, parent, id, position, size, wx.LC_REPORT | wx.LC_VIRTUAL)
         self.db = dbManager.getDbManager ()
 
     def setConsulta (self, what, fromWhat):
@@ -38,4 +39,7 @@ class queryLister (wx.ListCtrl):
 
     def OnGetItemText (self, item, coluna):
         """Dita qual valor fica em cada célula"""
-        return self.valores[item][coluna] or ''
+        valor = self.valores[item][coluna] or ''
+        if type (valor) is datetime.datetime:
+            valor = valor.date ().isoformat ()
+        return valor

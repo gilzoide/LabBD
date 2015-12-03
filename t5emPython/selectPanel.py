@@ -56,9 +56,13 @@ class selectPanel (wx.Panel):
             prox = page.GetNextSelected (prox)
             if prox == -1:
                 break
-            frame = updateFrame (self, tabela = self.note.GetPageText (self.note.GetSelection ()),
-                    colunas = page.colunas, tupla = page.valores[prox])
-            frame.Show ()
+            try:
+                frame = updateFrame (self, size = self.GetSize () - wx.Size (200, 200),
+                        tabela = self.note.GetPageText (self.note.GetSelection ()),
+                        colunas = page.colunas, tupla = page.valores[prox])
+                frame.Show ()
+            except Exception as e:
+                wx.MessageBox (str (e), "Erro ao tentar atualizar tupla(s)", wx.CENTRE + wx.ICON_ERROR + wx.OK)
         # Refaz a página
         page.refresh ()
 
@@ -67,6 +71,7 @@ class selectPanel (wx.Panel):
         # page é o queryLister atual
         page = self.note.GetCurrentPage ()
         prox = -1
+        app = self.GetParent ()
         while True:
             prox = page.GetNextSelected (prox)
             if prox == -1:
@@ -74,11 +79,11 @@ class selectPanel (wx.Panel):
             try:
                 self.db.delete (self.note.GetPageText (self.note.GetSelection ()),
                     page.colunas, page.valores[prox])
+                app.SetStatusText ("Tupla(s) apagada")
                 wx.MessageBox ("Tupla apagada")
-                self.GetParent ().SetStatusText ("Tupla(s) apagada")
             except Exception as e:
+                app.SetStatusText ("Erro ao apagar tupla(s)")
                 wx.MessageBox (str (e), "Erro ao apagar tupla(s)", wx.CENTRE + wx.ICON_ERROR + wx.OK)
-                self.GetParent ().SetStatusText ("Erro ao apagar tupla(s)")
         # Refaz a página
         page.refresh ()
 
