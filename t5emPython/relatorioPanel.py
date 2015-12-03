@@ -62,6 +62,6 @@ class relatorioPanel (wx.Panel):
     def onRel1 (self, event):
         """Botão de relatório 1"""
         db = dbManager.getDbManager ()
-        saida = db.procedure ('gera_relatorio', [self.rel1inicial.GetValue (),
+        saida = db.procedure ('relatorios.gera_relatorio', [self.rel1inicial.GetValue (),
                 self.rel1final.GetValue ()])
         self.msgBox.SetValue (saida)

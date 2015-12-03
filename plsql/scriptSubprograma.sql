@@ -91,41 +91,49 @@ END desvio_padrao;
 /
 
 /* Gera um relatório contendo informações sobre candidatos com idade entre idadeInicial e idadeFinal anos, e a soma e média de votos por candidato */
-CREATE OR REPLACE PROCEDURE gera_relatorio
-  (idadeInicial IN NUMBER,
-   idadeFinal IN NUMBER)
-IS
-dataNasc DATE;
-numero_votos NUMBER;
-media_votos NUMBER;
-CURSOR cursor_candidato IS
-  SELECT pessoa.nomePessoa, candidato.nomeFantasia, pessoa.endPessoa, pessoa.dataNasc
-    FROM pessoa JOIN candidato ON candidato.nroTitEleitor = pessoa.nroTitEleitor
-    WHERE idade_candidato(pessoa.dataNasc, idadeInicial, IdadeFinal) = 1;
-variavel_cursor cursor_candidato%Rowtype;
+CREATE OR REPLACE PACKAGE relatorios IS
+  PROCEDURE gera_relatorio (idadeInicial IN NUMBER, idadeFinal IN NUMBER);
+END relatorios;
+/
 
-BEGIN
- dbms_output.put_line('--------------------------------------------------------------------------------------------------------------');
-  SELECT COALESCE(SUM(candidato.nroVotos),0) INTO numero_votos FROM candidato JOIN pessoa ON candidato.nroTitEleitor = pessoa.nroTitEleitor
-    WHERE idade_candidato(pessoa.dataNasc, idadeInicial, IdadeFinal) = 1;
-  SELECT COALESCE(AVG(candidato.nroVotos),0) INTO media_votos FROM candidato JOIN pessoa ON candidato.nroTitEleitor = pessoa.nroTitEleitor
-    WHERE idade_candidato(pessoa.dataNasc, idadeInicial, IdadeFinal) = 1;
+CREATE OR REPLACE PACKAGE BODY relatorios IS
 
-  dbms_output.put_line( RPAD ('Nome Candidato', 40) || RPAD ('Nome Fantasia', 30) || RPAD ('Endereço', 25) || 'Data Nascimento');
-  dbms_output.put_line('______________________________________________________________________________________________________________');
-  OPEN cursor_candidato;
-  LOOP
-    FETCH cursor_candidato INTO variavel_cursor;
-    EXIT WHEN cursor_candidato%NotFound;
-    dbms_output.put_line(RPAD (variavel_cursor.nomePessoa, 40) || RPAD (COALESCE (variavel_cursor.nomeFantasia, ' '), 30) || RPAD (variavel_cursor.endPessoa, 25) || variavel_cursor.dataNasc);
-  END LOOP;
-  CLOSE cursor_candidato;
-  dbms_output.put_line('______________________________________________________________________________________________________________');
-  dbms_output.put_line('Numero total de votos: ' || RPAD (numero_votos, 16) || ' Média de votos: ' || RTRIM (RPAD (ROUND(media_votos,10), 13), '0') || ' Desvio Padrão: ' || RTRIM (RPAD (desvio_padrao(idadeInicial, idadeFinal), 25), '0'));
-  dbms_output.put_line('--------------------------------------------------------------------------------------------------------------');
-  dbms_output.put_line(' ');
-  dbms_output.put_line(' ');
-END gera_relatorio;
+  PROCEDURE gera_relatorio
+    (idadeInicial IN NUMBER,
+     idadeFinal IN NUMBER)
+  IS
+  dataNasc DATE;
+  numero_votos NUMBER;
+  media_votos NUMBER;
+  CURSOR cursor_candidato IS
+    SELECT pessoa.nomePessoa, candidato.nomeFantasia, pessoa.endPessoa, pessoa.dataNasc
+      FROM pessoa JOIN candidato ON candidato.nroTitEleitor = pessoa.nroTitEleitor
+      WHERE idade_candidato(pessoa.dataNasc, idadeInicial, IdadeFinal) = 1;
+  variavel_cursor cursor_candidato%Rowtype;
+  
+  BEGIN
+   dbms_output.put_line('--------------------------------------------------------------------------------------------------------------');
+    SELECT COALESCE(SUM(candidato.nroVotos),0) INTO numero_votos FROM candidato JOIN pessoa ON candidato.nroTitEleitor = pessoa.nroTitEleitor
+      WHERE idade_candidato(pessoa.dataNasc, idadeInicial, IdadeFinal) = 1;
+    SELECT COALESCE(AVG(candidato.nroVotos),0) INTO media_votos FROM candidato JOIN pessoa ON candidato.nroTitEleitor = pessoa.nroTitEleitor
+      WHERE idade_candidato(pessoa.dataNasc, idadeInicial, IdadeFinal) = 1;
+  
+    dbms_output.put_line( RPAD ('Nome Candidato', 40) || RPAD ('Nome Fantasia', 30) || RPAD ('Endereço', 25) || 'Data Nascimento');
+    dbms_output.put_line('______________________________________________________________________________________________________________');
+    OPEN cursor_candidato;
+    LOOP
+      FETCH cursor_candidato INTO variavel_cursor;
+      EXIT WHEN cursor_candidato%NotFound;
+      dbms_output.put_line(RPAD (variavel_cursor.nomePessoa, 40) || RPAD (COALESCE (variavel_cursor.nomeFantasia, ' '), 30) || RPAD (variavel_cursor.endPessoa, 25) || variavel_cursor.dataNasc);
+    END LOOP;
+    CLOSE cursor_candidato;
+    dbms_output.put_line('______________________________________________________________________________________________________________');
+    dbms_output.put_line('Numero total de votos: ' || RPAD (numero_votos, 16) || ' Média de votos: ' || RTRIM (RPAD (ROUND(media_votos,10), 13), '0') || ' Desvio Padrão: ' || RTRIM (RPAD (desvio_padrao(idadeInicial, idadeFinal), 25), '0'));
+    dbms_output.put_line('--------------------------------------------------------------------------------------------------------------');
+    dbms_output.put_line(' ');
+    dbms_output.put_line(' ');
+  END;
+END;
 /
 
 /*chama o procedure para diferentes faixas etárias */
@@ -173,8 +181,8 @@ Numero total de votos: 41               Média de votos: 3.1538461538  Desvio Pa
 set serveroutput on;
 DECLARE
 BEGIN
-gera_relatorio(10, 30);
-gera_relatorio(40, 60);
-gera_relatorio(60, 100);
+  relatorios.gera_relatorio(10, 30);
+  relatorios.gera_relatorio(40, 60);
+  relatorios.gera_relatorio(60, 100);
 END;
 /
