@@ -26,7 +26,7 @@ class selectPanel (wx.Panel):
         self.note = wx.Notebook (self, style = wx.NB_TOP)
         sizer.Add (self.note, proportion = 10, flag = wx.EXPAND)
         for i, tabela in enumerate (dbManager.TABELAS_IMPORTANTES):
-            pagina = queryLister (self.note, self.ID_TABELA + i, size = size - wx.Size (10, 0))
+            pagina = queryLister (self.note, self.ID_TABELA + i, size = size - wx.Size (10, 100))
             self.Bind (wx.EVT_LIST_COL_CLICK, pagina.OnColumnClick, id = self.ID_TABELA + i)
             pagina.setConsulta ('*', tabela)
             self.paginas.append (pagina)
