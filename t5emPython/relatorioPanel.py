@@ -53,8 +53,15 @@ class relatorioPanel (wx.Panel):
         sizer.Add (txt, flag = wx.ALIGN_CENTER)
 
         # campo 1 relatorio 2
-        esc = wx.Choice(self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize,
-       ['Ensino médio', 'Ensino fundamental', 'Ensino superior'])
+        hbox = wx.BoxSizer (wx.HORIZONTAL)
+        txt = wx.StaticText (self, wx.ID_ANY, "Escolaridade desejada")
+        ctrl = wx.Choice (self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize,
+                ['ensino medio', 'ensino fundamental', 'ensino superior'])
+        hbox.Add (txt, flag = wx.CENTER | wx.LEFT | wx.RIGHT, border = 10)
+        hbox.Add (ctrl, proportion = 1)
+        sizer.Add (hbox, flag = wx.EXPAND)
+
+        self.rel2 = ctrl
 
         # botão pra gerar 2
         button = wx.Button (self, self.ID_REL2, 'Gerar relatório')
@@ -78,5 +85,5 @@ class relatorioPanel (wx.Panel):
     def onRel2 (self, event):
         """Botão de relatório 2"""
         db = dbManager.getDbManager ()
-        saida = db.procedure ('relatorios.gera_relatorio2', [esc.GetString(self,GetCurrentSelection(self))])
+        saida = db.procedure ('relatorios.gera_relatorio2', [self.rel2.GetString (self.rel2.GetCurrentSelection ())])
         self.msgBox.SetValue (saida)
