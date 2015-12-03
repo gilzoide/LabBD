@@ -63,6 +63,7 @@ class relatorioPanel (wx.Panel):
 
         self.rel2 = ctrl
 
+        self.rel2  = esc
         # botão pra gerar 2
         button = wx.Button (self, self.ID_REL2, 'Gerar relatório')
         self.Bind (wx.EVT_BUTTON, self.onRel2, id = self.ID_REL2)
